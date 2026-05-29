@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数模小站 | 我的数学建模知识库</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f5f7fb; color: #1e293b; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        nav { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 10; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; max-width: 1200px; margin: 0 auto; }
+        .logo { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { text-decoration: none; color: #334155; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: #2563eb; }
+        .hero { text-align: center; padding: 64px 0 48px; }
+        .hero h1 { font-size: 2.8rem; margin-bottom: 16px; background: linear-gradient(135deg, #1e293b, #2563eb); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .hero p { font-size: 1.2rem; color: #475569; max-width: 700px; margin: 0 auto; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin: 48px 0; }
+        .card { background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #e2e8f0; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.1); }
+        .card h3 { font-size: 1.35rem; margin-bottom: 12px; color: #0f172a; }
+        .card p { color: #475569; margin-bottom: 16px; }
+        .tag { display: inline-block; background: #e0e7ff; color: #1e40af; font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+        footer { text-align: center; padding: 48px 0 32px; border-top: 1px solid #e2e8f0; margin-top: 48px; color: #64748b; }
+        @media (max-width: 768px) { .nav-links { gap: 16px; } .hero h1 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">📐 小西的数模小站</div>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="aph.html">层次分析法 (AHP)</a>
+                <a href="algorithms.html">算法</a>
+                <a href="experience.html">竞赛经验</a>
+                <a href="about.html">关于</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>数学建模 · 知识库</h1>
+            <p>评价模型 · 预测算法 · 优化理论 | 国赛美赛经验 | 代码与论文模板</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <span class="tag">评价模型</span>
+                <h3>层次分析法 (AHP)</h3>
+                <p>将复杂问题分解为多个层次，通过两两比较确定权重。适合没有数据支撑的主观评价问题。</p>
+            </div>
+            <div class="card">
+                <span class="tag">预测模型</span>
+                <h3>灰色预测 GM(1,1)</h3>
+                <p>小样本数据预测的利器。通过累加生成序列，挖掘系统演化规律，适合短期预测。</p>
+            </div>
+            <div class="card">
+                <span class="tag">启发式算法</span>
+                <h3>遗传算法</h3>
+                <p>模拟自然进化过程的搜索算法。适用于NP-hard问题、组合优化、参数调优。</p>
+            </div>
+            <div class="card">
+                <span class="tag">竞赛经验</span>
+                <h3>国赛论文排版技巧</h3>
+                <p>LaTeX模板 + 流程图绘制 + 三线表规范，拿下全国一等奖的论文长这样。</p>
+            </div>
+            <div class="card">
+                <span class="tag">MATLAB</span>
+                <h3>常用代码片段</h3>
+                <p>数据预处理、灵敏度分析、绘图美化。整理自2024国赛获奖代码。</p>
+            </div>
+            <div class="card">
+                <span class="tag">数据集</span>
+                <h3>2025 建模比赛常用数据</h3>
+                <p>经济指标、空气质量、交通流量。已清洗可直接复用。</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>📖 持续更新 · 记录我的数学建模学习之路</p>
+        <p style="margin-top: 8px; font-size: 0.85rem;">© 2025 数模小站 | 用 ❤️ 和 HTML 搭建</p>
+    </footer>
+</body>
+</html>

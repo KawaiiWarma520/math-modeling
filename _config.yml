@@ -1,7 +1,7 @@
 title: 数学建模知识分享
 description: 一位大学生的数学建模经验分享与学习笔记
-baseurl: ""
-url: ""  # 部署后替换为你的 GitHub Pages 地址
+baseurl: "/math-modeling"
+url: "https://kawaiiwarma520.github.io"
 lang: zh-CN
 
 # 主题设置 - 不启用远程主题，完全自定义

@@ -4,11 +4,7 @@ baseurl: "/math-modeling"
 url: "https://kawaiiwarma520.github.io"
 lang: zh-CN
 
-# 主题设置 - 不启用远程主题，完全自定义
-theme: null
-remote_theme: null
-
-# 插件
+# 不使用主题，完全自定义
 plugins:
   - jekyll-paginate
 

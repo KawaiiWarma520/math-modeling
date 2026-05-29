@@ -1,0 +1,37 @@
+title: 数学建模知识分享
+description: 一位大学生的数学建模经验分享与学习笔记
+baseurl: ""
+url: ""  # 部署后替换为你的 GitHub Pages 地址
+lang: zh-CN
+
+# 主题设置 - 不启用远程主题，完全自定义
+theme: null
+remote_theme: null
+
+# 插件
+plugins:
+  - jekyll-paginate
+
+# 分页
+paginate: 10
+paginate_path: "/page:num/"
+
+# 文章永久链接格式
+permalink: /:categories/:title/
+
+# 默认布局
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      comments: false
+
+# 排除文件
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor

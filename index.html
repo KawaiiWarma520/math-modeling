@@ -1,0 +1,75 @@
+---
+layout: default
+---
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <h1>数学建模知识分享</h1>
+    <p>一位大学生的数学建模学习笔记与竞赛经验总结。<br>涵盖模型学习、工具使用、资料整理与心得分享。</p>
+  </div>
+</section>
+
+<!-- Category Cards -->
+<div class="container">
+  <div class="category-grid">
+    <a href="{{ '/model-learning/' | relative_url }}" class="category-card">
+      <div class="icon">📚</div>
+      <h3>模型学习</h3>
+      <p>评价模型、预测模型、优化模型、统计模型… 从原理到应用，系统学习各类数学模型。</p>
+      <span class="card-link">浏览文章 →</span>
+    </a>
+    <a href="{{ '/tool-learning/' | relative_url }}" class="category-card">
+      <div class="icon">🛠</div>
+      <h3>工具学习</h3>
+      <p>MATLAB、Python、SPSS、LaTeX… 掌握建模必备工具，让效率翻倍。</p>
+      <span class="card-link">浏览文章 →</span>
+    </a>
+    <a href="{{ '/resource-sharing/' | relative_url }}" class="category-card">
+      <div class="icon">📁</div>
+      <h3>资料分享</h3>
+      <p>论文模板、数据集、优秀论文、学习书单… 优质资源一站式获取。</p>
+      <span class="card-link">浏览文章 →</span>
+    </a>
+    <a href="{{ '/experience-sharing/' | relative_url }}" class="category-card">
+      <div class="icon">💡</div>
+      <h3>经验分享</h3>
+      <p>比赛心得、备赛攻略、学习方法论… 用真实的经历给你最实用的建议。</p>
+      <span class="card-link">浏览文章 →</span>
+    </a>
+  </div>
+
+  <!-- Recent Posts -->
+  <section style="padding-bottom: 40px;">
+    <h2 class="section-title">最新文章</h2>
+    {% if site.posts.size > 0 %}
+    <ul class="post-list">
+      {% for post in site.posts limit:8 %}
+      <li class="post-item">
+        <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+        <div class="post-meta">
+          <span>📅 {{ post.date | date: "%Y-%m-%d" }}</span>
+          {% if post.categories %}
+          <span>📂 {{ post.categories | join: " / " }}</span>
+          {% endif %}
+        </div>
+        {% if post.excerpt %}
+        <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</div>
+        {% endif %}
+        {% if post.tags %}
+        <div>
+          {% for tag in post.tags %}
+          <span class="post-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color: var(--text-light); text-align: center; padding: 40px 0;">
+      还没有文章，敬请期待 🚀
+    </p>
+    {% endif %}
+  </section>
+</div>

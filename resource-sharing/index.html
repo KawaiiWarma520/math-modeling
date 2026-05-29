@@ -1,0 +1,28 @@
+---
+layout: page
+title: 📁 资料分享
+description: 论文模板、数据集、优秀论文、学习书单……优质资源一站式获取。
+---
+
+<ul class="post-list">
+  {% for post in site.posts %}
+    {% if post.categories contains "资料分享" %}
+    <li class="post-item">
+      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+      <div class="post-meta">
+        <span>📅 {{ post.date | date: "%Y-%m-%d" }}</span>
+      </div>
+      {% if post.excerpt %}
+      <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</div>
+      {% endif %}
+    </li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+{% assign count = site.posts | where: "categories", "资料分享" | size %}
+{% if count == 0 %}
+<p style="color: var(--text-light); text-align: center; padding: 60px 0;">
+  暂无内容，努力更新中 🚀
+</p>
+{% endif %}

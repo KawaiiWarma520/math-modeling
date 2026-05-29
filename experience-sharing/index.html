@@ -1,0 +1,28 @@
+---
+layout: page
+title: 💡 经验分享
+description: 比赛心得、备赛攻略、学习方法论……用真实的经历给你最实用的建议。
+---
+
+<ul class="post-list">
+  {% for post in site.posts %}
+    {% if post.categories contains "经验分享" %}
+    <li class="post-item">
+      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+      <div class="post-meta">
+        <span>📅 {{ post.date | date: "%Y-%m-%d" }}</span>
+      </div>
+      {% if post.excerpt %}
+      <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</div>
+      {% endif %}
+    </li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+{% assign count = site.posts | where: "categories", "经验分享" | size %}
+{% if count == 0 %}
+<p style="color: var(--text-light); text-align: center; padding: 60px 0;">
+  暂无内容，努力更新中 🚀
+</p>
+{% endif %}

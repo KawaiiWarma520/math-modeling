@@ -37,6 +37,12 @@ layout: default
       <p>比赛心得、备赛攻略、学习方法论… 用真实的经历给你最实用的建议。</p>
       <span class="card-link">浏览文章 →</span>
     </a>
+    <a href="{{ '/beginner-guide/' | relative_url }}" class="category-card">
+      <div class="icon">🌟</div>
+      <h3>新手教程</h3>
+      <p>数学建模是什么？怎么学？有哪些比赛？从零开始，带你入门数学建模的世界。</p>
+      <span class="card-link">浏览文章 →</span>
+    </a>
   </div>
 
   <!-- Recent Posts -->
@@ -50,7 +56,7 @@ layout: default
         <div class="post-meta">
           <span>📅 {{ post.date | date: "%Y-%m-%d" }}</span>
           {% if post.categories %}
-          <span>📂 {{ post.categories | join: " / " }}</span>
+          <span>{% include category-emoji.html name=post.categories[0] %} {{ post.categories | join: " / " }}</span>
           {% endif %}
         </div>
         {% if post.excerpt %}

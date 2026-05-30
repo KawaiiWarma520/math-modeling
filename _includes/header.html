@@ -4,11 +4,12 @@
     <button class="nav-toggle" aria-label="菜单">☰</button>
     <nav class="main-nav">
       <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="active"{% endif %}>首页</a>
-      <a href="{{ '/model-learning/' | relative_url }}" {% if page.url contains '/model-learning/' %}class="active"{% endif %}>模型学习</a>
-      <a href="{{ '/tool-learning/' | relative_url }}" {% if page.url contains '/tool-learning/' %}class="active"{% endif %}>工具学习</a>
-      <a href="{{ '/resource-sharing/' | relative_url }}" {% if page.url contains '/resource-sharing/' %}class="active"{% endif %}>资料分享</a>
-      <a href="{{ '/experience-sharing/' | relative_url }}" {% if page.url contains '/experience-sharing/' %}class="active"{% endif %}>经验分享</a>
       <a href="{{ '/beginner-guide/' | relative_url }}" {% if page.url contains '/beginner-guide/' %}class="active"{% endif %}>新手教程</a>
+      <a href="{{ '/model-learning/' | relative_url }}" {% if page.url contains '/model-learning/' %}class="active"{% endif %}>模型百科</a>
+      <a href="{{ '/paper-writing/' | relative_url }}" {% if page.url contains '/paper-writing/' %}class="active"{% endif %}>论文写作</a>
+      <a href="{{ '/tool-learning/' | relative_url }}" {% if page.url contains '/tool-learning/' %}class="active"{% endif %}>工具学习</a>
+      <a href="{{ '/past-exams/' | relative_url }}" {% if page.url contains '/past-exams/' %}class="active"{% endif %}>真题演练</a>
+      <a href="{{ '/resource-sharing/' | relative_url }}" {% if page.url contains '/resource-sharing/' %}class="active"{% endif %}>资料分享</a>
     </nav>
   </div>
 </header>

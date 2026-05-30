@@ -2,7 +2,7 @@
 layout: post
 title: "美赛经验复盘：从选题到提交的完整攻略"
 date: 2025-04-01 10:00:00 +0800
-categories: 经验分享
+categories: 新手教程
 tags: [美赛, 比赛经验, 备赛]
 ---
 

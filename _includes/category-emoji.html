@@ -1,13 +1,15 @@
 {%- assign emoji = "📂" -%}
-{%- if include.name == "模型学习" -%}
+{%- if include.name == "新手教程" -%}
+  {%- assign emoji = "🌟" -%}
+{%- elsif include.name == "模型百科" -%}
   {%- assign emoji = "📚" -%}
+{%- elsif include.name == "论文写作" -%}
+  {%- assign emoji = "✍️" -%}
 {%- elsif include.name == "工具学习" -%}
   {%- assign emoji = "🛠" -%}
+{%- elsif include.name == "真题演练" -%}
+  {%- assign emoji = "📝" -%}
 {%- elsif include.name == "资料分享" -%}
   {%- assign emoji = "📁" -%}
-{%- elsif include.name == "经验分享" -%}
-  {%- assign emoji = "💡" -%}
-{%- elsif include.name == "新手教程" -%}
-  {%- assign emoji = "🌟" -%}
 {%- endif -%}
 {{- emoji -}}

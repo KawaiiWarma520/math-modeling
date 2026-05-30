@@ -2,7 +2,7 @@
 layout: post
 title: "层次分析法（AHP）详解：从原理到实战"
 date: 2025-03-15 10:00:00 +0800
-categories: 模型学习
+categories: 模型百科
 tags: [评价模型, AHP, 入门]
 ---
 

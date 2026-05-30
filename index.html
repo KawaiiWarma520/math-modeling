@@ -56,7 +56,8 @@ layout: default
         <div class="post-meta">
           <span>📅 {{ post.date | date: "%Y-%m-%d" }}</span>
           {% if post.categories %}
-          <span>{% include category-emoji.html name=post.categories[0] %} {{ post.categories | join: " / " }}</span>
+          {% assign cat_name = post.categories[0] %}
+          <span>{% include category-emoji.html name=cat_name %} {{ post.categories | join: " / " }}</span>
           {% endif %}
         </div>
         {% if post.excerpt %}

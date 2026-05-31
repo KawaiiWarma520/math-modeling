@@ -1,0 +1,42 @@
+---
+layout: page
+title: 🏷 标签
+description: 按标签浏览所有文章——点击标签即可筛选出对应文章。
+---
+
+{% assign tags = site.tags | sort %}
+<div class="tag-cloud">
+  {% for tag in tags %}
+  <a href="#{{ tag[0] | slugify }}" class="tag-cloud-item">
+    🏷 {{ tag[0] }}
+    <span class="tag-count">{{ tag[1].size }}</span>
+  </a>
+  {% endfor %}
+</div>
+
+<hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border);">
+
+<div class="tag-posts">
+  {% for tag in tags %}
+  <section id="{{ tag[0] | slugify }}" class="tag-section">
+    <h2 class="section-title">🏷 {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}篇</span></h2>
+    <ul class="post-list">
+      {% for post in tag[1] %}
+      <li class="post-item">
+        <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+        <div class="post-meta">
+          <span>📅 {{ post.date | date: "%Y-%m-%d" }}</span>
+          {% if post.categories %}
+          {% assign cat_name = post.categories[0] %}
+          <span>{% include category-emoji.html name=cat_name %} {{ post.categories | join: " / " }}</span>
+          {% endif %}
+        </div>
+        {% if post.excerpt %}
+        <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</div>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+</div>

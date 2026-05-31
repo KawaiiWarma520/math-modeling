@@ -1,0 +1,93 @@
+---
+layout: page
+title: 🔍 搜索
+description: 搜索本站所有文章——输入关键词，查找你感兴趣的内容。
+---
+
+<div class="search-container">
+  <div class="search-box-wrapper">
+    <input type="text" id="search-input" class="search-input" placeholder="输入关键词搜索文章…（标题、标签、内容均可）" autofocus>
+    <span class="search-icon">🔍</span>
+  </div>
+  <div id="search-stats" class="search-stats"></div>
+  <div id="search-results" class="search-results">
+    <p class="search-hint">💡 试试搜索"线性规划"、"MATLAB"、"国赛"等关键词</p>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var searchInput = document.getElementById('search-input');
+    var resultsDiv = document.getElementById('search-results');
+    var statsDiv = document.getElementById('search-stats');
+    var posts = [];
+    var searchTimeout = null;
+
+    // Fetch the search index
+    fetch('{{ '/search.json' | relative_url }}')
+      .then(function(response) { return response.json(); })
+      .then(function(data) {
+        posts = data;
+      });
+
+    function doSearch(query) {
+      if (!query || query.length < 1) {
+        resultsDiv.innerHTML = '<p class="search-hint">💡 试试搜索"线性规划"、"MATLAB"、"国赛"等关键词</p>';
+        statsDiv.innerHTML = '';
+        return;
+      }
+
+      var q = query.toLowerCase();
+      var results = posts.filter(function(post) {
+        // Search in title
+        if (post.title.toLowerCase().includes(q)) return true;
+        // Search in tags
+        if (post.tags && post.tags.some(function(t) { return t.toLowerCase().includes(q); })) return true;
+        // Search in categories
+        if (post.categories && post.categories.some(function(c) { return c.toLowerCase().includes(q); })) return true;
+        // Search in excerpt
+        if (post.excerpt && post.excerpt.toLowerCase().includes(q)) return true;
+        return false;
+      });
+
+      statsDiv.innerHTML = '共找到 <strong>' + results.length + '</strong> 篇文章';
+
+      if (results.length === 0) {
+        resultsDiv.innerHTML = '<div class="search-empty"><p>😅 没有找到相关文章</p><p style="font-size:0.85rem;color:var(--text-muted);">试试其他关键词？</p></div>';
+        return;
+      }
+
+      var html = '<ul class="post-list">';
+      results.forEach(function(post) {
+        html += '<li class="post-item">';
+        html += '<h3><a href="' + post.url + '">' + post.title + '</a></h3>';
+        html += '<div class="post-meta">';
+        html += '<span>📅 ' + post.date + '</span>';
+        if (post.categories && post.categories.length) {
+          html += '<span>' + post.categories.join(' / ') + '</span>';
+        }
+        html += '</div>';
+        if (post.tags && post.tags.length) {
+          html += '<div class="post-tags-list">';
+          post.tags.forEach(function(tag) {
+            html += '<span class="post-tag">🏷 ' + tag + '</span>';
+          });
+          html += '</div>';
+        }
+        if (post.excerpt) {
+          html += '<div class="post-excerpt">' + post.excerpt.substring(0, 150) + '</div>';
+        }
+        html += '</li>';
+      });
+      html += '</ul>';
+      resultsDiv.innerHTML = html;
+    }
+
+    searchInput.addEventListener('input', function() {
+      if (searchTimeout) clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(function() {
+        doSearch(searchInput.value);
+      }, 200);
+    });
+  })();
+</script>

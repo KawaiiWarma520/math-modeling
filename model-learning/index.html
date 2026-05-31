@@ -15,12 +15,19 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
       {% if post.excerpt %}
       <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</div>
       {% endif %}
+      {% if post.tags %}
+      <div class="post-tags-list">
+        {% for tag in post.tags %}
+        <a href="{{ '/tag/' | relative_url }}#{{ tag | slugify }}" class="post-tag">🏷 {{ tag }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
     </li>
     {% endif %}
   {% endfor %}
 </ul>
 
-{% assign count = site.posts | where: "categories", "模型学习" | size %}
+{% assign count = site.posts | where: "categories", "模型百科" | size %}
 {% if count == 0 %}
 <p style="color: var(--text-light); text-align: center; padding: 60px 0;">
   暂无内容，努力更新中 🚀

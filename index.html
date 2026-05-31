@@ -70,9 +70,9 @@ layout: default
         <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</div>
         {% endif %}
         {% if post.tags %}
-        <div>
+        <div class="post-tags-list">
           {% for tag in post.tags %}
-          <span class="post-tag">{{ tag }}</span>
+          <a href="{{ '/tag/' | relative_url }}#{{ tag | slugify }}" class="post-tag">🏷 {{ tag }}</a>
           {% endfor %}
         </div>
         {% endif %}

@@ -66,8 +66,8 @@ layout: default
           <span>{% include category-emoji.html name=cat_name %} {{ post.categories | join: " / " }}</span>
           {% endif %}
         </div>
-        {% if post.excerpt %}
-        <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</div>
+        {% if post.description %}
+        <div class="post-excerpt">{{ post.description }}</div>
         {% endif %}
         {% if post.tags %}
         <div class="post-tags-list">

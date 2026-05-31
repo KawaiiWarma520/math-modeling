@@ -12,8 +12,8 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
       <div class="post-meta">
         <span>📅 {{ post.date | date: "%Y-%m-%d" }}</span>
       </div>
-      {% if post.excerpt %}
-      <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</div>
+      {% if post.description %}
+      <div class="post-excerpt">{{ post.description }}</div>
       {% endif %}
       {% if post.tags %}
       <div class="post-tags-list">

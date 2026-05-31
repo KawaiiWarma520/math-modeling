@@ -5,6 +5,11 @@ url: "https://kawaiiwarma520.github.io"
 lang: zh-CN
 
 # 不使用主题，完全自定义
+markdown: kramdown
+kramdown:
+  math_engine: null
+  syntax_highlighter: null
+
 plugins:
   - jekyll-paginate
 

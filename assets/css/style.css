@@ -411,6 +411,45 @@ img { max-width: 100%; height: auto; }
 .site-footer a { color: var(--text-muted); }
 .site-footer a:hover { color: var(--primary); }
 
+/* --- Code Copy Button --- */
+.code-wrapper {
+  position: relative;
+  margin: 20px 0;
+}
+.code-wrapper pre {
+  margin: 0;
+}
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all 0.2s;
+  opacity: 0;
+  z-index: 2;
+  line-height: 1.4;
+}
+.code-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+.copy-btn.copied {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+  opacity: 1;
+}
+
 /* --- Tags on Article Page --- */
 .post-tags {
   margin-top: 4px;

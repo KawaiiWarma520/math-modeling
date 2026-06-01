@@ -3,10 +3,20 @@ layout: null
 ---
 [
 {% for post in site.posts %}
+  {% assign cat = post.categories[0] %}
+  {% if cat == "新手教程" %}{% assign cat_emoji = "🌟" %}
+  {% elsif cat == "模型百科" %}{% assign cat_emoji = "📚" %}
+  {% elsif cat == "论文写作" %}{% assign cat_emoji = "✍️" %}
+  {% elsif cat == "工具学习" %}{% assign cat_emoji = "🛠" %}
+  {% elsif cat == "真题演练" %}{% assign cat_emoji = "📝" %}
+  {% elsif cat == "资料分享" %}{% assign cat_emoji = "📁" %}
+  {% else %}{% assign cat_emoji = "📂" %}
+  {% endif %}
   {
     "title": {{ post.title | jsonify }},
     "url": "{{ post.url | relative_url }}",
     "categories": {{ post.categories | jsonify }},
+    "cat_emoji": {{ cat_emoji | jsonify }},
     "tags": {{ post.tags | jsonify }},
     "date": "{{ post.date | date: '%Y-%m-%d' }}",
     "excerpt": {{ post.excerpt | strip_html | strip_newlines | jsonify }},

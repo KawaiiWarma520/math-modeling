@@ -48,18 +48,42 @@
       });
     });
   </script>
-  <!-- MathJax: renders kramdown's <script type="math/tex"> tags -->
+  <!-- KaTeX: renders math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      },
-      options: {
-        processHtmlScript: ['math/tex', 'math/tex; mode=display']
-      }
-    };
+    (function() {
+      // Step 1: Fix underscores that kramdown turned into <em> inside math regions
+      // kramdown with math_engine:null treats _ in $...$ as emphasis markers
+      // e.g. $a_{ij}$ becomes $a<em>{ij}</em>$ which breaks KaTeX
+      var fixEmInMath = function() {
+        var html = document.body.innerHTML;
+        // Fix inline math $...$ regions
+        html = html.replace(/\$(.+?)\$/g, function(m) {
+          return m.replace(/<\/?em>/g, '_');
+        });
+        // Fix display math $$...$$ regions
+        html = html.replace(/\$\$([\s\S]+?)\$\$/g, function(m) {
+          return m.replace(/<\/?em>/g, '_');
+        });
+        document.body.innerHTML = html;
+      };
+      fixEmInMath();
+
+      // Step 2: Run KaTeX auto-render
+      try {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
+      } catch(e) {}
+    })();
   </script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/3.2.2/es5/tex-chtml.js"></script>
 </body>
 </html>

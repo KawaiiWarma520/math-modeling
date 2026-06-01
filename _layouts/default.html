@@ -23,29 +23,6 @@
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Load KaTeX dynamically
-      var katexScript = document.createElement('script');
-      katexScript.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js';
-      katexScript.onload = function() {
-        // Render math from kramdown-generated script tags
-        document.querySelectorAll('script[type="math/tex"]').forEach(function(el) {
-          var tex = el.textContent;
-          var wrapper = document.createElement('span');
-          try { katex.render(tex, wrapper, {displayMode: false, throwOnError: false}); } catch(e) { wrapper.textContent = '$' + tex + '$'; }
-          el.parentNode.replaceChild(wrapper, el);
-        });
-        document.querySelectorAll('script[type="math/tex; mode=display"]').forEach(function(el) {
-          var tex = el.textContent;
-          var wrapper = document.createElement('div');
-          try { katex.render(tex, wrapper, {displayMode: true, throwOnError: false}); } catch(e) { wrapper.textContent = '$$' + tex + '$$'; }
-          el.parentNode.replaceChild(wrapper, el);
-        });
-      };
-      document.head.appendChild(katexScript);
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
       // Wrap code blocks for copy button
       document.querySelectorAll('.post-content pre').forEach(function(pre) {
         var wrapper = document.createElement('div');
@@ -74,6 +51,28 @@
         });
       });
     });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script>
+    // Render kramdown math/tex script tags with KaTeX
+    (function() {
+      var tags = document.querySelectorAll('script[type="math/tex"]');
+      for (var i = 0; i < tags.length; i++) {
+        var el = tags[i];
+        var tex = el.textContent;
+        var wrapper = document.createElement('span');
+        try { katex.render(tex, wrapper, {displayMode: false, throwOnError: false}); } catch(e) { wrapper.textContent = '$' + tex + '$'; }
+        el.parentNode.replaceChild(wrapper, el);
+      }
+      var dtags = document.querySelectorAll('script[type="math/tex; mode=display"]');
+      for (var i = 0; i < dtags.length; i++) {
+        var el = dtags[i];
+        var tex = el.textContent;
+        var wrapper = document.createElement('div');
+        try { katex.render(tex, wrapper, {displayMode: true, throwOnError: false}); } catch(e) { wrapper.textContent = '$$' + tex + '$$'; }
+        el.parentNode.replaceChild(wrapper, el);
+      }
+    })();
   </script>
 </body>
 </html>

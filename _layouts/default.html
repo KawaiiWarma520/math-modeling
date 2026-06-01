@@ -48,7 +48,18 @@
       });
     });
   </script>
-  <!-- MathJax: natively renders kramdown's <script type="math/tex"> tags -->
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+  <!-- MathJax: renders kramdown's <script type="math/tex"> tags -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        processHtmlScript: ['math/tex', 'math/tex; mode=display']
+      }
+    };
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/3.2.2/es5/tex-chtml.js"></script>
 </body>
 </html>

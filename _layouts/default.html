@@ -16,6 +16,31 @@
 
   {% include footer.html %}
 
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script>
+    // Immediately render all math from kramdown's mathjax script tags.
+    // kramdown converts $...$ to <script type="math/tex"> tags and $$...$$ to
+    // <script type="math/tex; mode=display"> tags, preserving underscores.
+    (function() {
+      var els, i, el, tex, wrapper;
+      els = document.querySelectorAll('script[type="math/tex"]');
+      for (i = 0; i < els.length; i++) {
+        el = els[i];
+        tex = el.textContent;
+        wrapper = document.createElement('span');
+        try { katex.render(tex, wrapper, {displayMode: false, throwOnError: false}); } catch(e) { wrapper.textContent = tex; }
+        el.parentNode.replaceChild(wrapper, el);
+      }
+      els = document.querySelectorAll('script[type="math/tex; mode=display"]');
+      for (i = 0; i < els.length; i++) {
+        el = els[i];
+        tex = el.textContent;
+        wrapper = document.createElement('div');
+        try { katex.render(tex, wrapper, {displayMode: true, throwOnError: false}); } catch(e) { wrapper.textContent = tex; }
+        el.parentNode.replaceChild(wrapper, el);
+      }
+    })();
+  </script>
   <script>
     document.querySelector('.nav-toggle')?.addEventListener('click', function() {
       document.querySelector('.main-nav').classList.toggle('open');
@@ -23,18 +48,15 @@
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Wrap code blocks for copy button
       document.querySelectorAll('.post-content pre').forEach(function(pre) {
         var wrapper = document.createElement('div');
         wrapper.className = 'code-wrapper';
         pre.parentNode.insertBefore(wrapper, pre);
         wrapper.appendChild(pre);
-
         var btn = document.createElement('button');
         btn.className = 'copy-btn';
         btn.textContent = '复制';
         wrapper.appendChild(btn);
-
         btn.addEventListener('click', function() {
           var code = pre.querySelector('code');
           var text = code ? code.textContent : '';
@@ -51,28 +73,6 @@
         });
       });
     });
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script>
-    // Render kramdown math/tex script tags with KaTeX
-    (function() {
-      var tags = document.querySelectorAll('script[type="math/tex"]');
-      for (var i = 0; i < tags.length; i++) {
-        var el = tags[i];
-        var tex = el.textContent;
-        var wrapper = document.createElement('span');
-        try { katex.render(tex, wrapper, {displayMode: false, throwOnError: false}); } catch(e) { wrapper.textContent = '$' + tex + '$'; }
-        el.parentNode.replaceChild(wrapper, el);
-      }
-      var dtags = document.querySelectorAll('script[type="math/tex; mode=display"]');
-      for (var i = 0; i < dtags.length; i++) {
-        var el = dtags[i];
-        var tex = el.textContent;
-        var wrapper = document.createElement('div');
-        try { katex.render(tex, wrapper, {displayMode: true, throwOnError: false}); } catch(e) { wrapper.textContent = '$$' + tex + '$$'; }
-        el.parentNode.replaceChild(wrapper, el);
-      }
-    })();
   </script>
 </body>
 </html>

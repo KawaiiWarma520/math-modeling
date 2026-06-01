@@ -8,7 +8,7 @@ lang: zh-CN
 markdown: kramdown
 kramdown:
   math_engine: mathjax
-  syntax_highlighter: null
+  syntax_highlighter: rouge
 
 plugins:
   - jekyll-paginate

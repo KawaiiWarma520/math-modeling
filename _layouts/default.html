@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
 
@@ -85,6 +84,30 @@
           });
         });
       });
+    });
+  </script>
+  <!-- KaTeX: render after DOM is ready -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js';
+      script.onload = function() {
+        // Render kramdown math/tex script tags using KaTeX
+        document.querySelectorAll('script[type="math/tex"]').forEach(function(el) {
+          var tex = el.textContent;
+          var wrapper = document.createElement('span');
+          try { katex.render(tex, wrapper, {displayMode: false, throwOnError: false}); } catch(e) {}
+          el.parentNode.replaceChild(wrapper, el);
+        });
+        document.querySelectorAll('script[type="math/tex; mode=display"]').forEach(function(el) {
+          var tex = el.textContent;
+          var wrapper = document.createElement('div');
+          try { katex.render(tex, wrapper, {displayMode: true, throwOnError: false}); } catch(e) {}
+          el.parentNode.replaceChild(wrapper, el);
+        });
+      };
+      document.head.appendChild(script);
     });
   </script>
 </body>

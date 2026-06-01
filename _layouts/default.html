@@ -16,8 +16,10 @@
   {% include footer.html %}
 
   <script>
-    document.querySelector('.nav-toggle')?.addEventListener('click', function() {
-      document.querySelector('.main-nav').classList.toggle('open');
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelector('.nav-toggle')?.addEventListener('click', function() {
+        document.querySelector('.main-nav').classList.toggle('open');
+      });
     });
   </script>
   <script>

@@ -36,6 +36,24 @@
           throwOnError: false
         });
       }
+      // Also render math from kramdown mathjax script tags
+      document.querySelectorAll('script[type="math/tex"]').forEach(function(el) {
+        var display = false;
+        var tex = el.textContent;
+        var wrapper = document.createElement('span');
+        try {
+          katex.render(tex, wrapper, {displayMode: display, throwOnError: false});
+          el.parentNode.replaceChild(wrapper, el);
+        } catch(e) {}
+      });
+      document.querySelectorAll('script[type="math/tex; mode=display"]').forEach(function(el) {
+        var tex = el.textContent;
+        var wrapper = document.createElement('div');
+        try {
+          katex.render(tex, wrapper, {displayMode: true, throwOnError: false});
+          el.parentNode.replaceChild(wrapper, el);
+        } catch(e) {}
+      });
     });
   </script>
   <script>

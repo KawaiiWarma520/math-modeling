@@ -26,5 +26,20 @@ layout: default
         {{ content }}
       </div>
     </article>
+
+    <nav class="post-nav">
+      <div class="post-nav-prev">
+        {% if page.previous %}
+        <span class="post-nav-label">← 上一篇</span>
+        <a href="{{ page.previous.url | relative_url }}">{{ page.previous.title }}</a>
+        {% endif %}
+      </div>
+      <div class="post-nav-next">
+        {% if page.next %}
+        <span class="post-nav-label">下一篇 →</span>
+        <a href="{{ page.next.url | relative_url }}">{{ page.next.title }}</a>
+        {% endif %}
+      </div>
+    </nav>
   </div>
 </main>

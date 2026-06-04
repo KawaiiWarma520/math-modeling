@@ -56,7 +56,7 @@ layout: default
     <h2 class="section-title">最新文章</h2>
     {% if site.posts.size > 0 %}
     <ul class="post-list">
-      {% for post in site.posts limit:8 %}
+      {% for post in site.posts limit:4 %}
       <li class="post-item">
         <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
         <div class="post-meta">

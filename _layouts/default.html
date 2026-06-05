@@ -57,15 +57,11 @@
   <script>
     (function() {
       // Step 1: Fix underscores that kramdown turned into <em> inside math regions
-      // kramdown with math_engine:null treats _ in $...$ as emphasis markers
-      // e.g. $a_{ij}$ becomes $a<em>{ij}</em>$ which breaks KaTeX
       var fixEmInMath = function() {
         var html = document.body.innerHTML;
-        // Fix inline math $...$ regions
         html = html.replace(/\$(.+?)\$/g, function(m) {
           return m.replace(/<\/?em>/g, '_');
         });
-        // Fix display math $$...$$ regions
         html = html.replace(/\$\$([\s\S]+?)\$\$/g, function(m) {
           return m.replace(/<\/?em>/g, '_');
         });
@@ -86,6 +82,25 @@
         });
       } catch(e) {}
     })();
+  </script>
+  <!-- Anchor offset: precise scroll for sticky header -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var HEADER_OFFSET = 80;
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('a[href^="#"]');
+        if (!link) return;
+        var id = link.getAttribute('href').slice(1);
+        if (!id) return;
+        var target = document.getElementById(id);
+        if (!target) return;
+        e.preventDefault();
+        var rect = target.getBoundingClientRect();
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        window.scrollTo({ top: rect.top + scrollTop - HEADER_OFFSET, behavior: 'smooth' });
+        history.pushState(null, null, '#' + id);
+      });
+    });
   </script>
 </body>
 </html>

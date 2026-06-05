@@ -425,6 +425,52 @@ img { max-width: 100%; height: auto; }
   .post-nav-next { text-align: left; }
 }
 
+/* --- Code vs Preview Side-by-Side --- */
+.code-preview {
+  display: flex;
+  gap: 16px;
+  margin: 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+.code-preview .code-side,
+.code-preview .preview-side {
+  flex: 1;
+  min-width: 0;
+}
+.code-preview .code-side {
+  background: #1e293b;
+  padding: 16px;
+  overflow-x: auto;
+}
+.code-preview .code-side pre {
+  margin: 0;
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+.code-preview .code-side code {
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.code-preview .preview-side {
+  padding: 20px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.code-preview .preview-side .preview-inner {
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .code-preview {
+    flex-direction: column;
+  }
+}
+
 /* --- Scrollbar --- */
 ::-webkit-scrollbar {
   width: 8px;

@@ -358,6 +358,13 @@ img { max-width: 100%; height: auto; }
   font-weight: 600;
 }
 
+/* --- Footnote offset for sticky header --- */
+.footnotes li,
+[id^="fn:"],
+[id^="fnr:"] {
+  scroll-margin-top: 80px;
+}
+
 /* --- Pagination --- */
 .pagination {
   text-align: center;

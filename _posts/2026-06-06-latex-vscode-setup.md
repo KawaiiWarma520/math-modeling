@@ -210,8 +210,8 @@ VS Code 的生态非常丰富，支持插件安装，从而实现功能扩展、
 ```
 
 把路径换成你电脑上 SumatraPDF 的实际安装路径。
-> ⚠️ **注意斜杠方向**：这里一定要用 `/`，**不要**用 Windows 默认的 `\`。
-> 原因是在 JSON 中，`\` 是转义字符（比如 `\n` 代表换行、`\t` 代表制表符），如果写成 `C:\Users\你的用户名`，JSON 会把 `\U` 当作无效转义序列，直接报错。
+> ⚠️ **注意斜杠方向**：这里一定要用 `/`，**不要**用 Windows 默认的 `\`。<br>
+> 原因是在 JSON 中，`\` 是转义字符（比如 `\n` 代表换行、`\t` 代表制表符），如果写成 `C:\Users\你的用户名`，JSON 会把 `\U` 当作无效转义序列，直接报错。<br>
 > 所以路径一律写成 `C:/Program Files/SumatraPDF/SumatraPDF.exe` 这种格式，或者写成 `C:\\Program Files\\SumatraPDF\\SumatraPDF.exe`（双反斜杠也可以，但 `/` 更简洁）。
 
 粘贴后按 `Ctrl + S` 保存，重启 VS Code。

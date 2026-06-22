@@ -2,8 +2,10 @@
 layout: default
 ---
 
-<main class="main-content">
-  <div class="container">
+<div class="post-wrapper">
+  <nav class="post-sidebar" aria-label="章节导航"></nav>
+
+  <main class="post-main">
     <article class="post">
       <header class="post-header">
         <h1>{{ page.title }}</h1>
@@ -41,5 +43,131 @@ layout: default
         {% endif %}
       </div>
     </nav>
-  </div>
-</main>
+  </main>
+</div>
+
+<script>
+(function(){
+  var content = document.querySelector('.post-content');
+  var sidebar = document.querySelector('.post-sidebar');
+  if (!content || !sidebar) return;
+
+  var CHINESE_NUM = ['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五'];
+  var headings = content.querySelectorAll('h2, h3');
+  var sections = [];
+  var h2Index = -1;
+
+  // Phase 1: collect headings and assign ids
+  headings.forEach(function(h){
+    if (!h.id) {
+      var text = (h.textContent || '').trim().replace(/[^\w一-龥]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+      h.id = text || 'sec-' + Math.random().toString(36).slice(2, 7);
+    }
+    h.style.scrollMarginTop = '84px';
+    sections.push({ el: h, tag: h.tagName });
+  });
+
+  // Phase 2: build sidebar HTML
+  var html = '';
+  sections.forEach(function(s, i){
+    if (s.tag === 'H2') {
+      h2Index++;
+      var hasSub = i + 1 < sections.length && sections[i+1].tag === 'H3';
+      var num = h2Index < CHINESE_NUM.length ? CHINESE_NUM[h2Index] : (h2Index + 1);
+      html += '<div class="post-sidebar__group">';
+      html += '<div class="post-sidebar__item" data-target="' + s.el.id + '">';
+      if (hasSub) {
+        html += '<span class="post-sidebar__toggle">▶</span>';
+      } else {
+        html += '<span class="post-sidebar__toggle-placeholder"></span>';
+      }
+      html += '<span class="post-sidebar__num">' + num + '</span>';
+      html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
+      html += '</div>';
+      if (hasSub) {
+        html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
+      }
+    } else if (s.tag === 'H3') {
+      // Close previous H3's sub if needed
+      html += '<a class="post-sidebar__sub-item" data-target="' + s.el.id + '">' + s.el.textContent.trim() + '</a>';
+      // Check if next is not H3 → close the sub
+      if (i + 1 >= sections.length || sections[i+1].tag !== 'H3') {
+        html += '</div>';
+      }
+    }
+    // Close the group after H2 (if no sub) or after sub closes
+    if (s.tag === 'H2') {
+      // Check if no sub followed
+      if (!(i + 1 < sections.length && sections[i+1].tag === 'H3')) {
+        html += '</div>';
+      }
+    } else if (s.tag === 'H3') {
+      // If next is H2 or end, close group
+      if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
+        html += '</div>';
+      }
+    }
+  });
+
+  sidebar.innerHTML = html;
+
+  // Phase 3: interactions
+  var items = sidebar.querySelectorAll('.post-sidebar__item');
+  var subItems = sidebar.querySelectorAll('.post-sidebar__sub-item');
+  var allLinks = sidebar.querySelectorAll('[data-target]');
+
+  // Click to scroll
+  allLinks.forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var target = document.getElementById(this.getAttribute('data-target'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Toggle expand/collapse
+  items.forEach(function(item){
+    var target = item.getAttribute('data-target');
+    var sub = target ? sidebar.querySelector('.post-sidebar__sub[data-parent="' + target + '"]') : null;
+    if (sub) {
+      var toggle = item.querySelector('.post-sidebar__toggle');
+      item.addEventListener('click', function(e){
+        e.preventDefault();
+        sub.classList.toggle('is-expanded');
+        if (toggle) toggle.classList.toggle('is-open');
+      });
+      // Open the sub if any child is active initially
+      var targetId = window.location.hash.replace('#', '');
+      if (targetId) {
+        var child = sub.querySelector('[data-target="' + targetId + '"]');
+        if (child) {
+          sub.classList.add('is-expanded');
+          if (toggle) toggle.classList.add('is-open');
+        }
+      }
+    }
+  });
+
+  // Scroll-based active highlight
+  var allSections = [];
+  allLinks.forEach(function(link){
+    var el = document.getElementById(link.getAttribute('data-target'));
+    if (el) allSections.push({ item: link, el: el });
+  });
+
+  function updateActive(){
+    var scrollY = window.scrollY + 90;
+    var active = allSections[0];
+    allSections.forEach(function(s){
+      if (s.el.offsetTop <= scrollY) active = s;
+    });
+    allSections.forEach(function(s){
+      s.item.classList.remove('is-active');
+    });
+    if (active) active.item.classList.add('is-active');
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+})();
+</script>

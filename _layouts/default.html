@@ -58,14 +58,16 @@
     (function() {
       // Step 1: Fix underscores that kramdown turned into <em> inside math regions
       var fixEmInMath = function() {
-        var html = document.body.innerHTML;
+        var content = document.querySelector('.post-content');
+        if (!content) return;
+        var html = content.innerHTML;
         html = html.replace(/\$(.+?)\$/g, function(m) {
           return m.replace(/<\/?em>/g, '_');
         });
         html = html.replace(/\$\$([\s\S]+?)\$\$/g, function(m) {
           return m.replace(/<\/?em>/g, '_');
         });
-        document.body.innerHTML = html;
+        content.innerHTML = html;
       };
       fixEmInMath();
 

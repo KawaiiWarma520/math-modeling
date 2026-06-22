@@ -715,16 +715,24 @@ img { max-width: 100%; height: auto; }
   flex-shrink: 0;
   padding: 4px 0 24px;
   max-height: calc(100vh - 100px);
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
 }
 
 .post-sidebar::-webkit-scrollbar {
-  width: 3px;
+  width: 5px;
+}
+.post-sidebar::-webkit-scrollbar-track {
+  background: transparent;
 }
 .post-sidebar::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 2px;
+  border-radius: 3px;
+}
+.post-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .post-sidebar__item {

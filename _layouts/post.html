@@ -121,7 +121,12 @@ layout: default
     link.addEventListener('click', function(e){
       e.preventDefault();
       var target = document.getElementById(this.getAttribute('data-target'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (target) {
+        var rect = target.getBoundingClientRect();
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        var offset = 80;
+        window.scrollTo({ top: rect.top + scrollTop - offset, behavior: 'smooth' });
+      }
     });
   });
 

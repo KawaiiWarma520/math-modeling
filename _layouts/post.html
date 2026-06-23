@@ -95,16 +95,12 @@ layout: default
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
       if (i + 1 >= sections.length || sections[i+1].tag !== 'H3') {
-        html += '</div>';
+        html += '</div></div>'; // close sub + group
       }
     }
     if (s.tag === 'H2') {
       if (!(i + 1 < sections.length && sections[i+1].tag === 'H3')) {
-        html += '</div>';
-      }
-    } else if (s.tag === 'H3') {
-      if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
-        html += '</div>';
+        html += '</div>'; // close group (no sub)
       }
     }
   });

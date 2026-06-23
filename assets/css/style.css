@@ -717,7 +717,6 @@ img { max-width: 100%; height: auto; }
   word-break: break-word;
 }
 .post-sidebar.is-collapsed { /* unused */ }
-}
 
 .post-sidebar::-webkit-scrollbar {
   width: 5px;
@@ -872,12 +871,107 @@ img { max-width: 100%; height: auto; }
   padding-left: 0;
 }
 
-/* 侧边栏响应式（手机端隐藏） */
+/* ===== 手机端抽屉遮罩 ===== */
+.sidebar-mask {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.sidebar-mask.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 手机端汉堡按钮 */
+.sidebar-mobile-btn {
+  display: none;
+  position: fixed;
+  right: 16px;
+  bottom: 24px;
+  z-index: 999;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gradient);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: transform 0.2s;
+}
+.sidebar-mobile-btn:active { transform: scale(0.92); }
+.sidebar-mobile-btn .mobile-btn-dot {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: #fff;
+  border-radius: 1px;
+}
+
+/* 手机端抽屉 */
 @media (max-width: 860px) {
   .post-wrapper { padding: 24px 16px 0; }
   .sidebar-area { display: none; }
   .sidebar-toggle { display: none; }
   .post-main { padding-left: 0; }
+
+  /* 手机端抽屉覆盖 .sidebar-area */
+  .sidebar-area.is-mobile {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 999;
+    background: var(--white);
+    box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+    opacity: 1;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .sidebar-area.is-mobile.is-open {
+    transform: translateX(0);
+  }
+  .sidebar-area.is-mobile .post-sidebar {
+    height: 100%;
+    padding-top: 60px; /* room for close button */
+  }
+
+  /* 抽屉内的关闭按钮 */
+  .sidebar-area.is-mobile .drawer-close {
+    display: flex;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-lighter);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 18px;
+    line-height: 1;
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  .sidebar-area.is-mobile .drawer-close:hover { background: var(--primary-lighter); }
+
+  .sidebar-mask { display: block; }
+  .sidebar-mobile-btn { display: flex; }
+
   .post-header h1 { font-size: 1.5rem; }
   .page-banner h1 { font-size: 1.5rem; }
 }

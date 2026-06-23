@@ -60,12 +60,11 @@ layout: default
   var sidebar = document.querySelector('.post-sidebar');
   if (!content || !sidebar) return;
 
-  var CHINESE_NUM = ['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五'];
   var headings = content.querySelectorAll('h2, h3');
   var sections = [];
   var h2Index = -1;
 
-  // Phase 1: collect headings and assign ids
+  // Phase 1: assign ids
   headings.forEach(function(h){
     if (!h.id) {
       var text = (h.textContent || '').trim().replace(/[^\w一-龥]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
@@ -81,7 +80,7 @@ layout: default
     if (s.tag === 'H2') {
       h2Index++;
       var hasSub = i + 1 < sections.length && sections[i+1].tag === 'H3';
-      html += '<div class="post-sidebar__group">';
+      html += '<div class="post-sidebar__group" data-group="' + s.el.id + '">';
       html += '<div class="post-sidebar__item" data-target="' + s.el.id + '">';
       html += '<span class="post-sidebar__toggle">' + (hasSub ? '▶' : '') + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
@@ -112,51 +111,35 @@ layout: default
 
   sidebar.innerHTML = html;
 
-  // Phase 3: interactions
-  var items = sidebar.querySelectorAll('.post-sidebar__item');
-  var subItems = sidebar.querySelectorAll('.post-sidebar__sub-item');
+  // Phase 3: single unified click handler
+  var highlightLocked = false;
   var allLinks = sidebar.querySelectorAll('[data-target]');
 
-  // Click to scroll + lock highlight
-  var highlightLocked = false;
   allLinks.forEach(function(link){
     link.addEventListener('click', function(e){
       e.preventDefault();
-      // Lock highlight to this item
+      var targetId = this.getAttribute('data-target');
+      var sub = targetId ? sidebar.querySelector('.post-sidebar__sub[data-parent="' + targetId + '"]') : null;
+
+      // Has sub-items → toggle fold, do NOT scroll
+      if (sub) {
+        sub.classList.toggle('is-expanded');
+        var toggle = this.querySelector('.post-sidebar__toggle');
+        if (toggle) toggle.classList.toggle('is-open');
+        return;
+      }
+
+      // No sub-items → scroll and lock highlight
       highlightLocked = true;
       allLinks.forEach(function(l){ l.classList.remove('is-active'); });
-      this.classList.add('is-active');
-      var target = document.getElementById(this.getAttribute('data-target'));
-      if (target) {
-        var rect = target.getBoundingClientRect();
+      link.classList.add('is-active');
+      var targetEl = targetId ? document.getElementById(targetId) : null;
+      if (targetEl) {
+        var rect = targetEl.getBoundingClientRect();
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        var offset = 80;
-        window.scrollTo({ top: rect.top + scrollTop - offset, behavior: 'smooth' });
+        window.scrollTo({ top: rect.top + scrollTop - 80, behavior: 'smooth' });
       }
     });
-  });
-
-  // Toggle expand/collapse
-  items.forEach(function(item){
-    var target = item.getAttribute('data-target');
-    var sub = target ? sidebar.querySelector('.post-sidebar__sub[data-parent="' + target + '"]') : null;
-    if (sub) {
-      var toggle = item.querySelector('.post-sidebar__toggle');
-      item.addEventListener('click', function(e){
-        e.preventDefault();
-        sub.classList.toggle('is-expanded');
-        if (toggle) toggle.classList.toggle('is-open');
-      });
-      // Open the sub if any child is active initially
-      var targetId = window.location.hash.replace('#', '');
-      if (targetId) {
-        var child = sub.querySelector('[data-target="' + targetId + '"]');
-        if (child) {
-          sub.classList.add('is-expanded');
-          if (toggle) toggle.classList.add('is-open');
-        }
-      }
-    }
   });
 
   // Sidebar fold/unfold
@@ -181,19 +164,11 @@ layout: default
     if (highlightLocked) return;
     var scrollY = window.scrollY + 90;
     var active = allSections[0] || null;
-    // Find the last section whose top is above scrollY,
-    // BUT if no section is above scrollY (page top), keep first
-    // if all sections are above scrollY (page bottom), keep last valid one
-    var found = false;
     for (var i = 0; i < allSections.length; i++) {
       var elTop = allSections[i].el.getBoundingClientRect().top + window.scrollY;
       if (elTop <= scrollY) {
         active = allSections[i];
-        found = true;
-      } else if (found) {
-        break;
       } else {
-        // First section is already below scrollY — keep active as first
         break;
       }
     }

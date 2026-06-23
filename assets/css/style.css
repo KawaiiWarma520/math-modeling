@@ -712,7 +712,7 @@ img { max-width: 100%; height: auto; }
 .post-sidebar {
   position: sticky;
   top: 80px;
-  width: 180px;
+  width: 220px;
   flex-shrink: 0;
   padding: 4px 0 24px;
   max-height: calc(100vh - 100px);
@@ -853,7 +853,8 @@ img { max-width: 100%; height: auto; }
   position: sticky;
   top: 80px;
   max-height: calc(100vh - 100px);
-  margin-right: 24px;
+  margin-right: 80px;
+  margin-left: -120px;
 }
 
 /* 折叠按钮 */

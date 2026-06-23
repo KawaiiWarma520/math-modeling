@@ -182,11 +182,14 @@ layout: default
   function updateActive(){
     var scrollY = window.scrollY + 90;
     var active = allSections[0];
-    // Find the last section whose top is above scrollY
-    allSections.forEach(function(s){
-      if (s.el.offsetTop <= scrollY) active = s;
-      else return; // sections are in order, once one is below, stop
-    });
+    // Use for loop to actually break when a section is below
+    for (var i = 0; i < allSections.length; i++) {
+      if (allSections[i].el.offsetTop <= scrollY) {
+        active = allSections[i];
+      } else {
+        break;
+      }
+    }
     allSections.forEach(function(s){
       s.item.classList.remove('is-active');
     });

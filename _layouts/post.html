@@ -61,7 +61,7 @@ layout: default
   if (!content || !sidebar) return;
 
   var CHINESE_NUM = ['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五'];
-  var headings = content.querySelectorAll('h2, h3, h4');
+  var headings = content.querySelectorAll('h2, h3');
   var sections = [];
   var h2Index = -1;
 
@@ -75,88 +75,53 @@ layout: default
     sections.push({ el: h, tag: h.tagName });
   });
 
-  // Phase 2: build sidebar HTML with h2 > h3 > h4 nesting
-  function getNextTag(i) {
-    return i + 1 < sections.length ? sections[i+1].tag : null;
-  }
+  // Phase 2: build sidebar HTML
   var html = '';
-  var h3Open = false;
-  var h4Open = false;
-  var lastH3Id = null;
-
   sections.forEach(function(s, i){
-    var next = getNextTag(i);
     if (s.tag === 'H2') {
       h2Index++;
-      // close h4 if open
-      if (h4Open) { html += '</div></div>'; h4Open = false; h3Open = false; }
-      // close h3 if open
-      if (h3Open) { html += '</div>'; h3Open = false; }
-      var hasH3 = next === 'H3';
+      var hasSub = i + 1 < sections.length && sections[i+1].tag === 'H3';
       var num = h2Index < CHINESE_NUM.length ? CHINESE_NUM[h2Index] : (h2Index + 1);
       html += '<div class="post-sidebar__group">';
       html += '<div class="post-sidebar__item" data-target="' + s.el.id + '">';
-      html += hasH3 ? '<span class="post-sidebar__toggle">▶</span>' : '<span class="post-sidebar__toggle-placeholder"></span>';
-      html += '<span class="post-sidebar__num">' + num + '</span>';
-      html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
-      html += '</div>';
-      if (hasH3) {
-        html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
-        h3Open = true;
-      } else {
-        html += '</div>'; // close group
-      }
-    } else if (s.tag === 'H3') {
-      // close previous h4 if open and next heading is not h4
-      if (h4Open) { html += '</div></div>'; h4Open = false; h3Open = false; }
-      // if previous h3 group is still open and we have a new h3, close it first
-      if (h3Open && lastH3Id !== null) {
-        html += '</div>'; // close previous sub
-        // don't close the group — a new sub will open
-      } else if (h3Open && lastH3Id === null) {
-        h3Open = false;
-      }
-      var hasH4 = next === 'H4';
-      lastH3Id = s.el.id;
-      html += '<div class="post-sidebar__item --sub-h3" data-target="' + s.el.id + '">';
-      if (hasH4) {
+      if (hasSub) {
         html += '<span class="post-sidebar__toggle">▶</span>';
       } else {
         html += '<span class="post-sidebar__toggle-placeholder"></span>';
       }
+      html += '<span class="post-sidebar__num">' + num + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
-      if (hasH4) {
-        html += '<div class="post-sidebar__sub --sub-h4" data-parent="' + s.el.id + '">';
-        h4Open = true;
-      } else {
-        // If next is H2, close the h2 group
-        if (next === 'H2' || next === null) {
-          if (h3Open) { html += '</div>'; h3Open = false; } // close sub
-        }
+      if (hasSub) {
+        html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
       }
-      // ensure h3 sub container is open for this h3 to live in
-      // at this point we need a wrapping container for h3 items
-    } else if (s.tag === 'H4') {
-      html += '<div class="post-sidebar__item --sub-h4-item" data-target="' + s.el.id + '">';
-      html += '<span class="post-sidebar__toggle-placeholder"></span>';
-      html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
-      html += '</div>';
-      // close h4 sub if next is not h4
-      if (next !== 'H4') {
-        html += '</div></div>'; // close h4 sub + h3 sub
-        h4Open = false;
-        h3Open = false;
+    } else if (s.tag === 'H3') {
+      // Close previous H3's sub if needed
+      html += '<a class="post-sidebar__sub-item" data-target="' + s.el.id + '">' + s.el.textContent.trim() + '</a>';
+      // Check if next is not H3 → close the sub
+      if (i + 1 >= sections.length || sections[i+1].tag !== 'H3') {
+        html += '</div>';
+      }
+    }
+    // Close the group after H2 (if no sub) or after sub closes
+    if (s.tag === 'H2') {
+      // Check if no sub followed
+      if (!(i + 1 < sections.length && sections[i+1].tag === 'H3')) {
+        html += '</div>';
+      }
+    } else if (s.tag === 'H3') {
+      // If next is H2 or end, close group
+      if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
+        html += '</div>';
       }
     }
   });
-  // close any remaining open containers
-  if (h4Open) html += '</div></div>';
-  else if (h3Open) html += '</div>';
 
   sidebar.innerHTML = html;
 
+  // Phase 3: interactions
   var items = sidebar.querySelectorAll('.post-sidebar__item');
+  var subItems = sidebar.querySelectorAll('.post-sidebar__sub-item');
   var allLinks = sidebar.querySelectorAll('[data-target]');
 
   // Click to scroll

@@ -871,34 +871,33 @@ img { max-width: 100%; height: auto; }
   padding-left: 0;
 }
 
-/* ===== 手机端目录入口条 ===== */
-.mobile-toc-bar {
+/* ===== 手机端浮动按钮 ===== */
+.sidebar-mobile-btn {
   display: none;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  margin: 16px 0 0;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  position: fixed;
+  right: 16px;
+  bottom: 24px;
+  z-index: 999;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gradient);
+  border: none;
   cursor: pointer;
-  transition: background 0.2s;
-  user-select: none;
-}
-.mobile-toc-bar:hover { background: var(--primary-lighter); }
-.mobile-toc-bar:active { transform: scale(0.98); }
-.mobile-toc-icon { font-size: 1rem; }
-.mobile-toc-text {
-  flex: 1;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text);
-}
-.mobile-toc-arrow {
-  font-size: 1.2rem;
-  color: var(--primary);
-  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   transition: transform 0.2s;
+}
+.sidebar-mobile-btn:active { transform: scale(0.92); }
+.sidebar-mobile-btn .mobile-btn-dot {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: #fff;
+  border-radius: 1px;
 }
 
 /* ===== 手机端抽屉遮罩 ===== */
@@ -925,7 +924,7 @@ img { max-width: 100%; height: auto; }
   .post-main { width: 100%; max-width: 100%; padding-left: 0; }
   .post-content { width: 100%; }
 
-  .mobile-toc-bar { display: flex; }
+  .sidebar-mobile-btn { display: flex; }
 
   /* 抽屉覆盖 .sidebar-area */
   .sidebar-area.is-mobile {

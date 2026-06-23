@@ -27,12 +27,6 @@ layout: default
         </div>
         {% endif %}
       </header>
-      <!-- 手机端目录入口条 -->
-      <div class="mobile-toc-bar" id="mobileTocBar">
-        <span class="mobile-toc-icon">📖</span>
-        <span class="mobile-toc-text">文章目录</span>
-        <span class="mobile-toc-arrow">›</span>
-      </div>
       <div class="post-content">
         {{ content }}
       </div>
@@ -65,7 +59,12 @@ layout: default
 <!-- 手机端遮罩层 -->
 <div class="sidebar-mask" id="sidebarMask"></div>
 
-<!-- 手机端目录按钮隐藏，改用内联条 -->
+<!-- 手机端浮动按钮 -->
+<button class="sidebar-mobile-btn" id="sidebarMobileBtn" aria-label="打开目录">
+  <span class="mobile-btn-dot"></span>
+  <span class="mobile-btn-dot"></span>
+  <span class="mobile-btn-dot"></span>
+</button>
 
 <script>
 (function(){
@@ -178,7 +177,7 @@ layout: default
   }
 
   // Mobile: drawer open/close
-  var mobileTocBar = document.getElementById('mobileTocBar');
+  var mobileBtn = document.getElementById('sidebarMobileBtn');
   var mask = document.getElementById('sidebarMask');
 
   function openDrawer() {
@@ -186,7 +185,6 @@ layout: default
     sidebarArea.classList.add('is-open');
     mask.classList.add('is-visible');
     document.body.style.overflow = 'hidden';
-    // 插上叉号
     var hasClose = sidebarArea.querySelector('.drawer-close');
     if (!hasClose) sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
   }
@@ -200,8 +198,8 @@ layout: default
     }, 350);
   }
 
-  if (mobileTocBar) {
-    mobileTocBar.addEventListener('click', function(e){
+  if (mobileBtn) {
+    mobileBtn.addEventListener('click', function(e){
       e.stopPropagation();
       openDrawer();
     });

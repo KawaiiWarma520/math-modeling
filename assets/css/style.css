@@ -815,11 +815,14 @@ img { max-width: 100%; height: auto; }
 /* 二级标题 */
 .post-sidebar__sub {
   display: none;
-  padding-left: 28px;
+  padding-left: 16px;
   margin: 1px 0;
 }
 .post-sidebar__sub.is-expanded {
   display: block;
+}
+.post-sidebar__sub.--sub-h4 {
+  padding-left: 12px;
 }
 
 .post-sidebar__sub-item {
@@ -838,6 +841,27 @@ img { max-width: 100%; height: auto; }
   color: var(--primary-dark);
 }
 .post-sidebar__sub-item.is-active {
+  color: var(--primary);
+  font-weight: 500;
+  background: var(--primary-lighter);
+}
+
+/* H3 在侧边栏中的样式 */
+.post-sidebar__item.--sub-h3 {
+  padding-left: 6px;
+  font-size: 0.8rem;
+}
+.post-sidebar__item.--sub-h3 .post-sidebar__num {
+  display: none;
+}
+
+/* H4 在侧边栏中的样式 */
+.post-sidebar__item.--sub-h4-item {
+  padding-left: 18px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.post-sidebar__item.--sub-h4-item.is-active {
   color: var(--primary);
   font-weight: 500;
   background: var(--primary-lighter);

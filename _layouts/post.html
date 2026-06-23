@@ -90,8 +90,9 @@ layout: default
         html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
       }
     } else if (s.tag === 'H3') {
+      var hasH4 = i + 1 < sections.length && sections[i+1].tag === 'H4';
       html += '<div class="post-sidebar__item post-sidebar__item--h3" data-target="' + s.el.id + '">';
-      html += '<span class="post-sidebar__toggle">▶</span>';
+      html += '<span class="post-sidebar__toggle">' + (hasH4 ? '▶' : '') + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
       if (i + 1 >= sections.length || sections[i+1].tag !== 'H3') {

@@ -721,7 +721,8 @@ img { max-width: 100%; height: auto; }
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
   transition: width 0.25s ease, opacity 0.25s ease, padding 0.25s ease;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
 }
 .post-sidebar.is-collapsed {
   width: 0;

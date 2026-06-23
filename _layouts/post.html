@@ -6,11 +6,9 @@ layout: default
 
   <div class="sidebar-area">
     <nav class="post-sidebar" aria-label="章节导航"></nav>
-    <div class="sidebar-toggle" id="sidebarToggle" title="切换导航">
+    <div class="sidebar-toggle" id="sidebarToggle" title="收起导航">
       <span class="toggle-icon">
-        <span></span>
-        <span></span>
-        <span></span>
+        <svg viewBox="0 0 16 16"><polyline points="10,4 6,8 10,12"/></svg>
       </span>
     </div>
   </div>
@@ -154,6 +152,7 @@ layout: default
   if (toggleBtn) {
     toggleBtn.addEventListener('click', function(){
       var collapsed = sidebar.classList.toggle('is-collapsed');
+      toggleBtn.classList.toggle('is-collapsed', collapsed);
       if (mainContent) mainContent.classList.toggle('is-expanded', collapsed);
     });
   }

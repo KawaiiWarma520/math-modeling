@@ -822,7 +822,7 @@ img { max-width: 100%; height: auto; }
   margin-left: -120px;
 }
 
-/* 汉堡按钮——始终显示三横图标 */
+/* 折叠按钮（蓝紫渐变圆点 + 箭头） */
 .sidebar-toggle {
   flex-shrink: 0;
   width: 20px;
@@ -840,19 +840,32 @@ img { max-width: 100%; height: auto; }
   user-select: none;
   margin-top: 18px;
 }
-.sidebar-toggle:hover { background: var(--primary-lighter); }
+.sidebar-toggle:hover { background: var(--primary-lighter); color: var(--primary); }
 .sidebar-toggle .toggle-icon {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-lighter);
+  transition: all 0.25s;
 }
-.sidebar-toggle .toggle-icon span {
-  display: block;
-  width: 14px;
-  height: 2px;
-  background: var(--text-light);
-  border-radius: 1px;
-  transition: background 0.2s;
+.sidebar-toggle:hover .toggle-icon { background: var(--gradient); }
+.sidebar-toggle:hover .toggle-icon svg { stroke: #fff; }
+.sidebar-toggle .toggle-icon svg {
+  width: 10px; height: 10px;
+  stroke: var(--primary-light);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.25s ease;
+}
+.sidebar-toggle.is-collapsed .toggle-icon { background: var(--gradient); }
+.sidebar-toggle.is-collapsed .toggle-icon svg {
+  stroke: #fff;
+  transform: rotate(180deg);
 }
 
 /* 正文区域（有侧边栏时） */

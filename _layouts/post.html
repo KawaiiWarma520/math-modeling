@@ -116,10 +116,15 @@ layout: default
   var subItems = sidebar.querySelectorAll('.post-sidebar__sub-item');
   var allLinks = sidebar.querySelectorAll('[data-target]');
 
-  // Click to scroll
+  // Click to scroll + lock highlight
+  var highlightLocked = false;
   allLinks.forEach(function(link){
     link.addEventListener('click', function(e){
       e.preventDefault();
+      // Lock highlight to this item
+      highlightLocked = true;
+      allLinks.forEach(function(l){ l.classList.remove('is-active'); });
+      this.classList.add('is-active');
       var target = document.getElementById(this.getAttribute('data-target'));
       if (target) {
         var rect = target.getBoundingClientRect();
@@ -172,6 +177,7 @@ layout: default
   });
 
   function updateActive(){
+    if (highlightLocked) return;
     var scrollY = window.scrollY + 90;
     var active = allSections[0] || null;
     // Find the last section whose top is above scrollY,

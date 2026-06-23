@@ -699,36 +699,24 @@ img { max-width: 100%; height: auto; }
    ============================================ */
 
 .post-wrapper {
-  max-width: 100%;
-  margin: 0;
+  max-width: 960px;
+  margin: 0 auto;
   padding: 32px 16px 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0;
   flex: 1;
 }
 
 .post-sidebar {
-  position: sticky;
-  top: 80px;
   width: 220px;
-  flex-shrink: 0;
   padding: 4px 0 24px;
-  max-height: calc(100vh - 100px);
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
-  transition: width 0.25s ease, opacity 0.25s ease, padding 0.25s ease;
   white-space: normal;
   word-break: break-word;
 }
-.post-sidebar.is-collapsed {
-  width: 0;
-  padding: 0;
-  overflow: hidden;
-  opacity: 0;
+.post-sidebar.is-collapsed { /* unused */ }
 }
 
 .post-sidebar::-webkit-scrollbar {
@@ -813,12 +801,18 @@ img { max-width: 100%; height: auto; }
 
 /* 侧边栏容器 */
 .sidebar-area {
-  display: block;
-  position: sticky;
+  position: fixed;
+  left: 36px;
   top: 80px;
-  max-height: calc(100vh - 100px);
-  margin-right: 80px;
-  margin-left: -120px;
+  height: calc(100vh - 100px);
+  z-index: 1000;
+  width: 220px;
+  overflow: hidden;
+  transition: width 0.25s ease, opacity 0.25s ease;
+}
+.sidebar-area.is-collapsed {
+  width: 0;
+  opacity: 0;
 }
 
 /* 折叠按钮（固定左侧，蓝紫渐变圆点 + 箭头） */
@@ -871,21 +865,16 @@ img { max-width: 100%; height: auto; }
   transform: rotate(180deg);
 }
 
-/* 正文区域（有侧边栏时） */
+/* 正文区域 */
 .post-main {
-  flex: 1;
-  min-width: 0;
   max-width: 900px;
+  margin: 0 auto;
   padding-left: 0;
-  transition: padding 0.25s ease;
 }
 
 /* 侧边栏响应式（手机端隐藏） */
 @media (max-width: 860px) {
-  .post-wrapper {
-    flex-direction: column;
-    padding: 24px 16px 0;
-  }
+  .post-wrapper { padding: 24px 16px 0; }
   .sidebar-area { display: none; }
   .sidebar-toggle { display: none; }
   .post-main { padding-left: 0; }

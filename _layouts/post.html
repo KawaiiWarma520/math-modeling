@@ -4,15 +4,56 @@ layout: default
 
 <div class="post-wrapper">
 
-  <div class="sidebar-toggle" id="sidebarToggle" title="收起导航">
-    <span class="toggle-icon">
-      <svg viewBox="0 0 16 16"><polyline points="10,4 6,8 10,12"/></svg>
-    </span>
-  </div>
-
   <div class="sidebar-area">
     <nav class="post-sidebar" aria-label="章节导航"></nav>
   </div>
+
+  <main class="post-main" id="mainContent">
+    <article class="post">
+      <header class="post-header">
+        <h1>{{ page.title }}</h1>
+        <div class="post-meta">
+          <span>📅 {{ page.date | date: "%Y-%m-%d" }}</span>
+          {% if page.categories %}
+          {% assign cat_name = page.categories[0] %}
+          <span>{% include category-emoji.html name=cat_name %} {{ page.categories | join: " / " }}</span>
+          {% endif %}
+        </div>
+        {% if page.tags %}
+        <div class="post-tags">
+          {% for tag in page.tags %}
+          <a href="{{ '/tag/' | relative_url }}#{{ tag | slugify }}" class="tag">{{ tag }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </header>
+      <div class="post-content">
+        {{ content }}
+      </div>
+    </article>
+
+    <nav class="post-nav">
+      <div class="post-nav-prev">
+        {% if page.previous %}
+        <span class="post-nav-label">← 上一篇</span>
+        <a href="{{ page.previous.url | relative_url }}">{{ page.previous.title }}</a>
+        {% endif %}
+      </div>
+      <div class="post-nav-next">
+        {% if page.next %}
+        <span class="post-nav-label">下一篇 →</span>
+        <a href="{{ page.next.url | relative_url }}">{{ page.next.title }}</a>
+        {% endif %}
+      </div>
+    </nav>
+  </main>
+</div>
+
+<div class="sidebar-toggle" id="sidebarToggle" title="收起导航">
+  <span class="toggle-icon">
+    <svg viewBox="0 0 16 16"><polyline points="10,4 6,8 10,12"/></svg>
+  </span>
+</div>
 
   <main class="post-main" id="mainContent">
     <article class="post">
@@ -149,12 +190,10 @@ layout: default
 
   // Sidebar fold/unfold
   var toggleBtn = document.getElementById('sidebarToggle');
-  var mainContent = document.getElementById('mainContent');
+  var sidebarArea = document.querySelector('.sidebar-area');
   if (toggleBtn) {
     toggleBtn.addEventListener('click', function(){
-      var collapsed = sidebar.classList.toggle('is-collapsed');
-      toggleBtn.classList.toggle('is-collapsed', collapsed);
-      if (mainContent) mainContent.classList.toggle('is-expanded', collapsed);
+      sidebarArea.classList.toggle('is-collapsed');
     });
   }
 

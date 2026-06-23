@@ -871,6 +871,36 @@ img { max-width: 100%; height: auto; }
   padding-left: 0;
 }
 
+/* ===== 手机端目录入口条 ===== */
+.mobile-toc-bar {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin: 16px 0 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+}
+.mobile-toc-bar:hover { background: var(--primary-lighter); }
+.mobile-toc-bar:active { transform: scale(0.98); }
+.mobile-toc-icon { font-size: 1rem; }
+.mobile-toc-text {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.mobile-toc-arrow {
+  font-size: 1.2rem;
+  color: var(--primary);
+  font-weight: 700;
+  transition: transform 0.2s;
+}
+
 /* ===== 手机端抽屉遮罩 ===== */
 .sidebar-mask {
   display: none;
@@ -887,35 +917,6 @@ img { max-width: 100%; height: auto; }
   pointer-events: auto;
 }
 
-/* 手机端汉堡按钮 */
-.sidebar-mobile-btn {
-  display: none;
-  position: fixed;
-  right: 16px;
-  bottom: 24px;
-  z-index: 999;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--gradient);
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  transition: transform 0.2s;
-}
-.sidebar-mobile-btn:active { transform: scale(0.92); }
-.sidebar-mobile-btn .mobile-btn-dot {
-  display: block;
-  width: 16px;
-  height: 2px;
-  background: #fff;
-  border-radius: 1px;
-}
-
 /* 手机端抽屉 */
 @media (max-width: 860px) {
   .post-wrapper { width: 100%; padding: 24px 16px 0; }
@@ -924,17 +925,20 @@ img { max-width: 100%; height: auto; }
   .post-main { width: 100%; max-width: 100%; padding-left: 0; }
   .post-content { width: 100%; }
 
-  /* 手机端抽屉覆盖 .sidebar-area */
+  .mobile-toc-bar { display: flex; }
+
+  /* 抽屉覆盖 .sidebar-area */
   .sidebar-area.is-mobile {
-    display: block;
+    display: flex;
+    flex-direction: column;
     position: fixed;
     left: 0;
     top: 0;
-    width: 280px;
+    width: 290px;
     height: 100vh;
     z-index: 999;
     background: var(--white);
-    box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+    box-shadow: 2px 0 24px rgba(0,0,0,0.18);
     overflow: hidden;
     opacity: 1;
     transform: translateX(-100%);
@@ -943,35 +947,50 @@ img { max-width: 100%; height: auto; }
   .sidebar-area.is-mobile.is-open {
     transform: translateX(0);
   }
+
+  /* 抽屉头部渐变条 */
+  .sidebar-area.is-mobile::before {
+    content: '📖 文章目录';
+    display: block;
+    flex-shrink: 0;
+    padding: 20px 16px 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--gradient);
+  }
+
+  /* 抽屉内滚动区 */
   .sidebar-area.is-mobile .post-sidebar {
-    height: 100%;
-    padding-top: 60px; /* room for close button */
+    flex: 1;
+    height: auto;
+    padding: 8px 0 24px;
+    overflow-y: auto;
   }
 
   /* 抽屉内的关闭按钮 */
   .sidebar-area.is-mobile .drawer-close {
-    display: flex;
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 32px;
-    height: 32px;
+    top: 18px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--primary-lighter);
+    background: rgba(255,255,255,0.2);
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    color: var(--text-muted);
-    font-size: 18px;
+    color: #fff;
+    font-size: 16px;
     line-height: 1;
-    transition: background 0.2s;
     z-index: 10;
+    transition: background 0.2s;
   }
-  .sidebar-area.is-mobile .drawer-close:hover { background: var(--primary-lighter); }
+  .sidebar-area.is-mobile .drawer-close:hover { background: rgba(255,255,255,0.35); }
 
   .sidebar-mask { display: block; }
-  .sidebar-mobile-btn { display: flex; }
 
   .post-header h1 { font-size: 1.5rem; }
   .page-banner h1 { font-size: 1.5rem; }

@@ -27,6 +27,12 @@ layout: default
         </div>
         {% endif %}
       </header>
+      <!-- 手机端目录入口条 -->
+      <div class="mobile-toc-bar" id="mobileTocBar">
+        <span class="mobile-toc-icon">📖</span>
+        <span class="mobile-toc-text">文章目录</span>
+        <span class="mobile-toc-arrow">›</span>
+      </div>
       <div class="post-content">
         {{ content }}
       </div>
@@ -59,12 +65,7 @@ layout: default
 <!-- 手机端遮罩层 -->
 <div class="sidebar-mask" id="sidebarMask"></div>
 
-<!-- 手机端汉堡按钮 -->
-<button class="sidebar-mobile-btn" id="sidebarMobileBtn" aria-label="打开目录">
-  <span class="mobile-btn-dot"></span>
-  <span class="mobile-btn-dot"></span>
-  <span class="mobile-btn-dot"></span>
-</button>
+<!-- 手机端目录按钮隐藏，改用内联条 -->
 
 <script>
 (function(){
@@ -177,7 +178,7 @@ layout: default
   }
 
   // Mobile: drawer open/close
-  var mobileBtn = document.getElementById('sidebarMobileBtn');
+  var mobileTocBar = document.getElementById('mobileTocBar');
   var mask = document.getElementById('sidebarMask');
 
   function openDrawer() {
@@ -186,7 +187,8 @@ layout: default
     mask.classList.add('is-visible');
     document.body.style.overflow = 'hidden';
     // 插上叉号
-    sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
+    var hasClose = sidebarArea.querySelector('.drawer-close');
+    if (!hasClose) sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
   }
   function closeDrawer() {
     sidebarArea.classList.remove('is-open');
@@ -194,13 +196,12 @@ layout: default
     document.body.style.overflow = '';
     setTimeout(function(){
       sidebarArea.classList.remove('is-mobile');
-      // 收起动画结束后移除叉号
       if (closeBtn.parentNode) closeBtn.parentNode.removeChild(closeBtn);
     }, 350);
   }
 
-  if (mobileBtn) {
-    mobileBtn.addEventListener('click', function(e){
+  if (mobileTocBar) {
+    mobileTocBar.addEventListener('click', function(e){
       e.stopPropagation();
       openDrawer();
     });

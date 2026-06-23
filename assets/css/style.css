@@ -769,7 +769,6 @@ img { max-width: 100%; height: auto; }
   border-left-color: var(--primary);
 }
 
-.post-sidebar__num {
 .post-sidebar__item--h3 {
   padding-left: 10px;
   font-size: 15px;

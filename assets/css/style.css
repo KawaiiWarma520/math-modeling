@@ -719,6 +719,14 @@ img { max-width: 100%; height: auto; }
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
+  transition: width 0.25s ease, opacity 0.25s ease, padding 0.25s ease;
+  white-space: nowrap;
+}
+.post-sidebar.is-collapsed {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
 }
 
 .post-sidebar::-webkit-scrollbar {
@@ -894,12 +902,7 @@ img { max-width: 100%; height: auto; }
 }
 
 /* 收起状态 */
-.post-sidebar.is-collapsed {
-  width: 0;
-  padding: 0;
-  overflow: hidden;
-  opacity: 0;
-}
+
 
 /* 正文区域（有侧边栏时） */
 .post-main {

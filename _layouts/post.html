@@ -131,12 +131,24 @@ layout: default
 
   sidebar.innerHTML = html;
 
-  // Add mobile close button
+  // Add mobile close button (only on mobile)
+  function isMobile() { return window.innerWidth <= 860; }
   var closeBtn = document.createElement('button');
   closeBtn.className = 'drawer-close';
   closeBtn.innerHTML = '✕';
   closeBtn.setAttribute('aria-label', '关闭目录');
-  sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
+  if (isMobile()) {
+    sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
+  }
+  window.addEventListener('resize', function(){
+    // ensure close button only shows on mobile
+    var hasBtn = sidebarArea.contains(closeBtn);
+    if (isMobile() && !hasBtn) {
+      sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
+    } else if (!isMobile() && hasBtn) {
+      sidebarArea.removeChild(closeBtn);
+    }
+  });
 
   // Phase 3: single unified click handler
   var highlightLocked = false;
@@ -180,7 +192,6 @@ layout: default
   // Mobile: drawer open/close
   var mobileBtn = document.getElementById('sidebarMobileBtn');
   var mask = document.getElementById('sidebarMask');
-  function isMobile() { return window.innerWidth <= 860; }
 
   function openDrawer() {
     sidebarArea.classList.add('is-mobile');

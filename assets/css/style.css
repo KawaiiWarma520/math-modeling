@@ -748,15 +748,15 @@ img { max-width: 100%; height: auto; }
 .post-sidebar__item {
   display: flex;
   align-items: flex-start;
-  gap: 4px;
+  gap: 6px;
   padding: 6px 10px;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-light);
   cursor: pointer;
   border-left: 3px solid transparent;
   transition: background 0.15s, color 0.15s;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 .post-sidebar__item:hover {
   background: #eef2ff;
@@ -769,46 +769,36 @@ img { max-width: 100%; height: auto; }
   border-left-color: var(--primary);
 }
 
-.post-sidebar__item--h3 {
-  padding-left: 10px;
-  font-size: 15px;
-}
-
-.post-sidebar__num {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--primary);
-  width: 16px;
-  flex-shrink: 0;
-  text-align: right;
-  line-height: 1.4;
-  overflow: hidden;
-}
+/* 层级缩进 + 字号递减 */
+.post-sidebar__item--h2 { padding-left: 10px; font-size: 15px; font-weight: 600; }
+.post-sidebar__item--h3 { padding-left: 28px; font-size: 14px; }
+.post-sidebar__item--h4 { padding-left: 46px; font-size: 13px; }
 
 .post-sidebar__label-text {
   flex: 1;
   min-width: 0;
   word-break: break-word;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
-/* 折叠箭头 */
+/* 折叠箭头 ›（旋转 90° 变成 v） */
 .post-sidebar__toggle {
-  width: 14px;
+  width: 18px;
   flex-shrink: 0;
-  font-size: 10px;
+  font-size: 16px;
+  font-weight: 700;
   color: var(--text-muted);
   text-align: center;
-  line-height: 1.4;
-  overflow: hidden;
-  transition: transform 0.2s;
+  line-height: 1.5;
+  transition: transform 0.25s ease;
   user-select: none;
+  display: inline-block;
 }
 .post-sidebar__toggle.is-open {
   transform: rotate(90deg);
 }
 
-/* 二级标题容器 */
+/* 子标题容器 */
 .post-sidebar__sub {
   display: none;
   margin: 1px 0;
@@ -816,31 +806,12 @@ img { max-width: 100%; height: auto; }
 .post-sidebar__sub.is-expanded {
   display: block;
 }
-  display: block;
-  padding: 5px 12px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: background 0.15s;
-  line-height: 1.4;
-  margin-bottom: 1px;
-}
-.post-sidebar__sub-item:hover {
-  background: #eef2ff;
-  color: var(--primary-dark);
-}
-.post-sidebar__sub-item.is-active {
-  color: var(--primary);
-  font-weight: 500;
-  background: var(--primary-lighter);
-}
 
 .post-sidebar__group {
   margin-bottom: 1px;
 }
 
-/* 侧边栏容器（含折叠按钮） */
+/* 侧边栏容器（含汉堡按钮） */
 .sidebar-area {
   display: flex;
   align-items: flex-start;
@@ -851,7 +822,7 @@ img { max-width: 100%; height: auto; }
   margin-left: -120px;
 }
 
-/* 折叠按钮 */
+/* 汉堡按钮——始终显示三横图标 */
 .sidebar-toggle {
   flex-shrink: 0;
   width: 20px;
@@ -869,36 +840,20 @@ img { max-width: 100%; height: auto; }
   user-select: none;
   margin-top: 18px;
 }
-.sidebar-toggle:hover { background: var(--primary-lighter); color: var(--primary); }
+.sidebar-toggle:hover { background: var(--primary-lighter); }
 .sidebar-toggle .toggle-icon {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--primary-lighter);
-  transition: all 0.25s;
+  flex-direction: column;
+  gap: 3px;
 }
-.sidebar-toggle:hover .toggle-icon { background: var(--gradient); }
-.sidebar-toggle:hover .toggle-icon svg { stroke: #fff; }
-.sidebar-toggle .toggle-icon svg {
-  width: 10px; height: 10px;
-  stroke: var(--primary-light);
-  stroke-width: 2.5;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 0.25s ease;
+.sidebar-toggle .toggle-icon span {
+  display: block;
+  width: 14px;
+  height: 2px;
+  background: var(--text-light);
+  border-radius: 1px;
+  transition: background 0.2s;
 }
-.sidebar-toggle.is-collapsed .toggle-icon { background: var(--gradient); }
-.sidebar-toggle.is-collapsed .toggle-icon svg {
-  stroke: #fff;
-  transform: rotate(180deg);
-}
-
-/* 收起状态 */
-
 
 /* 正文区域（有侧边栏时） */
 .post-main {

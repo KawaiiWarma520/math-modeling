@@ -81,11 +81,9 @@ layout: default
     if (s.tag === 'H2') {
       h2Index++;
       var hasSub = i + 1 < sections.length && sections[i+1].tag === 'H3';
-      var num = h2Index < CHINESE_NUM.length ? CHINESE_NUM[h2Index] : (h2Index + 1);
       html += '<div class="post-sidebar__group">';
       html += '<div class="post-sidebar__item" data-target="' + s.el.id + '">';
       html += '<span class="post-sidebar__toggle">' + (hasSub ? '▶' : '') + '</span>';
-      html += '<span class="post-sidebar__num">' + num + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
       if (hasSub) {
@@ -176,11 +174,19 @@ layout: default
   function updateActive(){
     var scrollY = window.scrollY + 90;
     var active = allSections[0] || null;
+    // Find the last section whose top is above scrollY,
+    // BUT if no section is above scrollY (page top), keep first
+    // if all sections are above scrollY (page bottom), keep last valid one
+    var found = false;
     for (var i = 0; i < allSections.length; i++) {
       var elTop = allSections[i].el.getBoundingClientRect().top + window.scrollY;
       if (elTop <= scrollY) {
         active = allSections[i];
+        found = true;
+      } else if (found) {
+        break;
       } else {
+        // First section is already below scrollY — keep active as first
         break;
       }
     }

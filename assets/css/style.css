@@ -811,10 +811,9 @@ img { max-width: 100%; height: auto; }
   margin-bottom: 1px;
 }
 
-/* 侧边栏容器（含汉堡按钮） */
+/* 侧边栏容器 */
 .sidebar-area {
-  display: flex;
-  align-items: flex-start;
+  display: block;
   position: sticky;
   top: 80px;
   max-height: calc(100vh - 100px);
@@ -822,10 +821,14 @@ img { max-width: 100%; height: auto; }
   margin-left: -120px;
 }
 
-/* 折叠按钮（蓝紫渐变圆点 + 箭头） */
+/* 折叠按钮（固定左侧，蓝紫渐变圆点 + 箭头） */
 .sidebar-toggle {
-  flex-shrink: 0;
-  width: 20px;
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  width: 36px;
   height: 48px;
   display: flex;
   align-items: center;
@@ -835,18 +838,18 @@ img { max-width: 100%; height: auto; }
   border: 1px solid var(--border);
   border-left: none;
   border-radius: 0 8px 8px 0;
+  box-shadow: 1px 2px 8px rgba(0,0,0,0.07);
   color: var(--text-muted);
-  transition: all 0.2s;
+  transition: background 0.2s;
   user-select: none;
-  margin-top: 18px;
 }
 .sidebar-toggle:hover { background: var(--primary-lighter); color: var(--primary); }
 .sidebar-toggle .toggle-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--primary-lighter);
   transition: all 0.25s;
@@ -854,7 +857,7 @@ img { max-width: 100%; height: auto; }
 .sidebar-toggle:hover .toggle-icon { background: var(--gradient); }
 .sidebar-toggle:hover .toggle-icon svg { stroke: #fff; }
 .sidebar-toggle .toggle-icon svg {
-  width: 10px; height: 10px;
+  width: 11px; height: 11px;
   stroke: var(--primary-light);
   stroke-width: 2.5;
   fill: none;
@@ -884,6 +887,7 @@ img { max-width: 100%; height: auto; }
     padding: 24px 16px 0;
   }
   .sidebar-area { display: none; }
+  .sidebar-toggle { display: none; }
   .post-main { padding-left: 0; }
   .post-header h1 { font-size: 1.5rem; }
   .page-banner h1 { font-size: 1.5rem; }

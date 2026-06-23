@@ -107,6 +107,9 @@ layout: default
       html += '<span class="post-sidebar__toggle">' + (hasH4 ? '›' : '') + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
+      if (hasH4) {
+        html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
+      }
       if (i + 1 >= sections.length || (sections[i+1].tag !== 'H3' && sections[i+1].tag !== 'H4')) {
         html += '</div></div>'; // close sub + group
       }

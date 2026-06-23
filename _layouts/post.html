@@ -131,24 +131,11 @@ layout: default
 
   sidebar.innerHTML = html;
 
-  // Add mobile close button (only on mobile)
-  function isMobile() { return window.innerWidth <= 860; }
+  // Mobile drawer elements
   var closeBtn = document.createElement('button');
   closeBtn.className = 'drawer-close';
   closeBtn.innerHTML = '✕';
   closeBtn.setAttribute('aria-label', '关闭目录');
-  if (isMobile()) {
-    sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
-  }
-  window.addEventListener('resize', function(){
-    // ensure close button only shows on mobile
-    var hasBtn = sidebarArea.contains(closeBtn);
-    if (isMobile() && !hasBtn) {
-      sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
-    } else if (!isMobile() && hasBtn) {
-      sidebarArea.removeChild(closeBtn);
-    }
-  });
 
   // Phase 3: single unified click handler
   var highlightLocked = false;
@@ -198,13 +185,18 @@ layout: default
     sidebarArea.classList.add('is-open');
     mask.classList.add('is-visible');
     document.body.style.overflow = 'hidden';
+    // 插上叉号
+    sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
   }
   function closeDrawer() {
     sidebarArea.classList.remove('is-open');
     mask.classList.remove('is-visible');
     document.body.style.overflow = '';
-    // Keep is-mobile so styles apply, remove after transition
-    setTimeout(function(){ sidebarArea.classList.remove('is-mobile'); }, 350);
+    setTimeout(function(){
+      sidebarArea.classList.remove('is-mobile');
+      // 收起动画结束后移除叉号
+      if (closeBtn.parentNode) closeBtn.parentNode.removeChild(closeBtn);
+    }, 350);
   }
 
   if (mobileBtn) {

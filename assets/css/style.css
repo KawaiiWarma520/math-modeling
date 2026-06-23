@@ -918,10 +918,11 @@ img { max-width: 100%; height: auto; }
 
 /* 手机端抽屉 */
 @media (max-width: 860px) {
-  .post-wrapper { padding: 24px 16px 0; }
+  .post-wrapper { width: 100%; padding: 24px 16px 0; }
   .sidebar-area { display: none; }
   .sidebar-toggle { display: none; }
-  .post-main { padding-left: 0; }
+  .post-main { width: 100%; max-width: 100%; padding-left: 0; }
+  .post-content { width: 100%; }
 
   /* 手机端抽屉覆盖 .sidebar-area */
   .sidebar-area.is-mobile {

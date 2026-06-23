@@ -3,18 +3,9 @@ layout: default
 ---
 
 <div class="post-wrapper">
+  <nav class="post-sidebar" aria-label="章节导航"></nav>
 
-  <div class="sidebar-area">
-    <nav class="post-sidebar" aria-label="章节导航"></nav>
-
-    <div class="sidebar-toggle" id="sidebarToggle" title="收起导航">
-      <span class="toggle-icon">
-        <svg viewBox="0 0 16 16"><polyline points="10,4 6,8 10,12"/></svg>
-      </span>
-    </div>
-  </div>
-
-  <main class="post-main" id="mainContent">
+  <main class="post-main">
     <article class="post">
       <header class="post-header">
         <h1>{{ page.title }}</h1>
@@ -53,18 +44,6 @@ layout: default
       </div>
     </nav>
   </main>
-
-  <!-- 手机端悬浮目录按钮 + 滑出面板 -->
-  <button class="mobile-toc-btn" id="mobileTocBtn" aria-label="目录">📖</button>
-  <div class="mobile-drawer-overlay" id="mobileOverlay"></div>
-  <aside class="mobile-drawer" id="mobileDrawer">
-    <div class="mobile-drawer__header">
-      <span>📖 目录</span>
-      <button class="mobile-drawer__close" id="mobileDrawerClose">✕</button>
-    </div>
-    <div class="mobile-drawer__body" id="mobileDrawerBody"></div>
-  </aside>
-
 </div>
 
 <script>
@@ -78,7 +57,7 @@ layout: default
   var sections = [];
   var h2Index = -1;
 
-  // Phase 1: assign ids
+  // Phase 1: collect headings and assign ids
   headings.forEach(function(h){
     if (!h.id) {
       var text = (h.textContent || '').trim().replace(/[^\w一-龥]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
@@ -88,7 +67,7 @@ layout: default
     sections.push({ el: h, tag: h.tagName });
   });
 
-  // Phase 2: build sidebar
+  // Phase 2: build sidebar HTML
   var html = '';
   sections.forEach(function(s, i){
     if (s.tag === 'H2') {
@@ -109,38 +88,45 @@ layout: default
         html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
       }
     } else if (s.tag === 'H3') {
+      // Close previous H3's sub if needed
       html += '<a class="post-sidebar__sub-item" data-target="' + s.el.id + '">' + s.el.textContent.trim() + '</a>';
+      // Check if next is not H3 → close the sub
       if (i + 1 >= sections.length || sections[i+1].tag !== 'H3') {
         html += '</div>';
       }
     }
+    // Close the group after H2 (if no sub) or after sub closes
     if (s.tag === 'H2') {
+      // Check if no sub followed
       if (!(i + 1 < sections.length && sections[i+1].tag === 'H3')) {
         html += '</div>';
       }
     } else if (s.tag === 'H3') {
+      // If next is H2 or end, close group
       if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
         html += '</div>';
       }
     }
   });
+
   sidebar.innerHTML = html;
 
   // Phase 3: interactions
   var items = sidebar.querySelectorAll('.post-sidebar__item');
+  var subItems = sidebar.querySelectorAll('.post-sidebar__sub-item');
   var allLinks = sidebar.querySelectorAll('[data-target]');
 
-  function scrollToEl(el){
-    var rect = el.getBoundingClientRect();
-    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    window.scrollTo({ top: rect.top + scrollTop - 80, behavior: 'smooth' });
-  }
-
+  // Click to scroll
   allLinks.forEach(function(link){
     link.addEventListener('click', function(e){
       e.preventDefault();
       var target = document.getElementById(this.getAttribute('data-target'));
-      if (target) scrollToEl(target);
+      if (target) {
+        var rect = target.getBoundingClientRect();
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        var offset = 80;
+        window.scrollTo({ top: rect.top + scrollTop - offset, behavior: 'smooth' });
+      }
     });
   });
 
@@ -155,6 +141,7 @@ layout: default
         sub.classList.toggle('is-expanded');
         if (toggle) toggle.classList.toggle('is-open');
       });
+      // Open the sub if any child is active initially
       var targetId = window.location.hash.replace('#', '');
       if (targetId) {
         var child = sub.querySelector('[data-target="' + targetId + '"]');
@@ -166,54 +153,8 @@ layout: default
     }
   });
 
-  // Fold button
-  var toggleBtn = document.getElementById('sidebarToggle');
-  var mainContent = document.getElementById('mainContent');
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function(){
-      var collapsed = sidebar.classList.toggle('is-collapsed');
-      toggleBtn.classList.toggle('is-collapsed', collapsed);
-      if (mainContent) mainContent.classList.toggle('is-expanded', collapsed);
-    });
-  }
-
-  // Mobile drawer
-  var tocBtn = document.getElementById('mobileTocBtn');
-  var overlay = document.getElementById('mobileOverlay');
-  var drawer = document.getElementById('mobileDrawer');
-  var drawerBody = document.getElementById('mobileDrawerBody');
-  var drawerClose = document.getElementById('mobileDrawerClose');
-
-  function openDrawer(){ overlay.classList.add('is-open'); drawer.classList.add('is-open'); }
-  function closeDrawer(){ overlay.classList.remove('is-open'); drawer.classList.remove('is-open'); }
-
-  if (tocBtn && drawer && overlay && drawerBody) {
-    var dhtml = '';
-    sections.forEach(function(s, i){
-      if (s.tag !== 'H2') return;
-      var num = h2Index < CHINESE_NUM.length ? CHINESE_NUM[i] : (i + 1);
-      dhtml += '<div class="mobile-drawer__item" data-target="' + s.el.id + '">' +
-        '<span class="mobile-drawer__num">' + num + '</span>' +
-        s.el.textContent.trim() + '</div>';
-    });
-    drawerBody.innerHTML = dhtml;
-
-    drawerBody.querySelectorAll('.mobile-drawer__item').forEach(function(ditem){
-      ditem.addEventListener('click', function(){
-        closeDrawer();
-        var el = document.getElementById(this.getAttribute('data-target'));
-        if (el) scrollToEl(el);
-      });
-    });
-
-    tocBtn.addEventListener('click', openDrawer);
-    overlay.addEventListener('click', closeDrawer);
-    if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
-  }
-
-  // Scroll active highlight
+  // Scroll-based active highlight
   var allSections = [];
-  var DI = drawerBody;
   allLinks.forEach(function(link){
     var el = document.getElementById(link.getAttribute('data-target'));
     if (el) allSections.push({ item: link, el: el });
@@ -227,18 +168,8 @@ layout: default
     });
     allSections.forEach(function(s){
       s.item.classList.remove('is-active');
-      if (DI) {
-        var d = DI.querySelector('.mobile-drawer__item[data-target="' + s.el.id + '"]');
-        if (d) d.classList.remove('is-active');
-      }
     });
-    if (active) {
-      active.item.classList.add('is-active');
-      if (DI) {
-        var d = DI.querySelector('.mobile-drawer__item[data-target="' + active.el.id + '"]');
-        if (d) d.classList.add('is-active');
-      }
-    }
+    if (active) active.item.classList.add('is-active');
   }
 
   window.addEventListener('scroll', updateActive, { passive: true });

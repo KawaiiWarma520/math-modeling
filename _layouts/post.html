@@ -84,11 +84,7 @@ layout: default
       var num = h2Index < CHINESE_NUM.length ? CHINESE_NUM[h2Index] : (h2Index + 1);
       html += '<div class="post-sidebar__group">';
       html += '<div class="post-sidebar__item" data-target="' + s.el.id + '">';
-      if (hasSub) {
-        html += '<span class="post-sidebar__toggle">▶</span>';
-      } else {
-        html += '<span class="post-sidebar__toggle-placeholder"></span>';
-      }
+      html += '<span class="post-sidebar__toggle">' + (hasSub ? '▶' : '') + '</span>';
       html += '<span class="post-sidebar__num">' + num + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
@@ -96,21 +92,19 @@ layout: default
         html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
       }
     } else if (s.tag === 'H3') {
-      // Close previous H3's sub if needed
-      html += '<a class="post-sidebar__sub-item" data-target="' + s.el.id + '">' + s.el.textContent.trim() + '</a>';
-      // Check if next is not H3 → close the sub
+      html += '<div class="post-sidebar__item post-sidebar__item--h3" data-target="' + s.el.id + '">';
+      html += '<span class="post-sidebar__toggle">▶</span>';
+      html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
+      html += '</div>';
       if (i + 1 >= sections.length || sections[i+1].tag !== 'H3') {
         html += '</div>';
       }
     }
-    // Close the group after H2 (if no sub) or after sub closes
     if (s.tag === 'H2') {
-      // Check if no sub followed
       if (!(i + 1 < sections.length && sections[i+1].tag === 'H3')) {
         html += '</div>';
       }
     } else if (s.tag === 'H3') {
-      // If next is H2 or end, close group
       if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
         html += '</div>';
       }

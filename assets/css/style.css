@@ -748,10 +748,10 @@ img { max-width: 100%; height: auto; }
 .post-sidebar__item {
   display: flex;
   align-items: flex-start;
-  gap: 6px;
-  padding: 7px 10px;
+  gap: 4px;
+  padding: 6px 10px;
   border-radius: 6px;
-  font-size: 0.82rem;
+  font-size: 16px;
   color: var(--text-light);
   cursor: pointer;
   border-left: 3px solid transparent;
@@ -769,6 +769,12 @@ img { max-width: 100%; height: auto; }
   border-left-color: var(--primary);
 }
 
+/* H3 子项 */
+.post-sidebar__item--h3 {
+  padding-left: 10px;
+  font-size: 15px;
+}
+
 .post-sidebar__num {
   font-size: 0.72rem;
   font-weight: 600;
@@ -776,8 +782,8 @@ img { max-width: 100%; height: auto; }
   width: 16px;
   flex-shrink: 0;
   text-align: right;
-  margin-top: 1px;
   line-height: 1.4;
+  overflow: hidden;
 }
 
 .post-sidebar__label-text {
@@ -789,15 +795,13 @@ img { max-width: 100%; height: auto; }
 
 /* 折叠箭头 */
 .post-sidebar__toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  flex-shrink: 0;
   font-size: 10px;
   color: var(--text-muted);
-  cursor: pointer;
-  flex-shrink: 0;
+  text-align: center;
+  line-height: 1.4;
+  overflow: hidden;
   transition: transform 0.2s;
   user-select: none;
 }
@@ -805,24 +809,14 @@ img { max-width: 100%; height: auto; }
   transform: rotate(90deg);
 }
 
-/* 无折叠箭头的占位 */
-.post-sidebar__toggle-placeholder {
-  width: 16px;
-  flex-shrink: 0;
-  display: inline-block;
-}
-
-/* 二级标题 */
+/* 二级标题容器 */
 .post-sidebar__sub {
   display: none;
-  padding-left: 28px;
   margin: 1px 0;
 }
 .post-sidebar__sub.is-expanded {
   display: block;
 }
-
-.post-sidebar__sub-item {
   display: block;
   padding: 5px 12px;
   border-radius: 4px;
@@ -912,7 +906,7 @@ img { max-width: 100%; height: auto; }
   flex: 1;
   min-width: 0;
   max-width: 900px;
-  padding-left: 24px;
+  padding-left: 0;
   transition: padding 0.25s ease;
 }
 

@@ -350,6 +350,7 @@ groupOrder.forEach(function(groupName, gi){
 });
 
 // ===== 分页 =====
+var showPageFn = null; // expose for sidebar
 (function(){
   var sections = document.querySelectorAll('.model-section');
   if (!sections.length) return;
@@ -361,7 +362,17 @@ groupOrder.forEach(function(groupName, gi){
   var totalPages = Math.ceil(allItems.length / perPage);
   if (totalPages <= 1) return;
   var pagi = document.getElementById('modelPagination');
+
+  function getPageForItem(el) {
+    for (var i = 0; i < allItems.length; i++) {
+      if (allItems[i].el === el) return Math.floor(i / perPage) + 1;
+    }
+    return 1;
+  }
+
+  var currentPage = 1;
   function showPage(page) {
+    currentPage = page;
     var banner = document.querySelector('.page-banner');
     if (banner) banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
     var start = (page - 1) * perPage;
@@ -391,6 +402,8 @@ groupOrder.forEach(function(groupName, gi){
     var p = parseInt(btn.getAttribute('data-page'));
     if (p >= 1 && p <= totalPages) showPage(p);
   });
+
+  showPageFn = { showPage: showPage, getPageForItem: getPageForItem, getCurrentPage: function() { return currentPage; }, allItems: allItems, perPage: perPage };
   showPage(1);
 })();
 
@@ -449,6 +462,13 @@ groupOrder.forEach(function(groupName, gi){
       }
       var targetEl = document.getElementById(targetId);
       if (targetEl) {
+        // 如果文章不在当前分页，先切换分页
+        if (showPageFn) {
+          var page = showPageFn.getPageForItem(targetEl.closest('.post-item'));
+          if (page && page !== showPageFn.getCurrentPage()) {
+            showPageFn.showPage(page);
+          }
+        }
         highlightLocked = true;
         allLinks.forEach(function(l){ l.classList.remove('is-active'); });
         this.classList.add('is-active');

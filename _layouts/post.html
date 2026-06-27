@@ -52,7 +52,7 @@ layout: default
 <!-- 桌面端折叠按钮（固定左侧） -->
 <div class="sidebar-toggle" id="sidebarToggle" title="收起导航">
   <span class="toggle-icon">
-    <svg viewBox="0 0 16 16"><polyline points="10,4 6,8 10,12"/></svg>
+    <svg viewBox="0 0 16 16"><polyline points="6,4 10,8 6,12"/></svg>
   </span>
 </div>
 
@@ -191,6 +191,7 @@ layout: default
   if (toggleBtn) {
     toggleBtn.addEventListener('click', function(){
       sidebarArea.classList.toggle('is-collapsed');
+      toggleBtn.classList.toggle('is-collapsed');
     });
   }
 

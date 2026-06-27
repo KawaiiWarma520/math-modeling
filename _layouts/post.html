@@ -75,7 +75,6 @@ layout: default
 
   var headings = content.querySelectorAll('h2, h3, h4');
   var sections = [];
-  var h2Index = -1;
 
   // Phase 1: assign ids
   headings.forEach(function(h){
@@ -87,47 +86,66 @@ layout: default
     sections.push({ el: h, tag: h.tagName });
   });
 
-  // Phase 2: build sidebar HTML
+  // Phase 2: build sidebar HTML (with animation support)
   var html = '';
+  var h2Open = false, h2HasSub = false;
+  var h3Open = false, h3HasSub = false;
+
+  function closeH3() {
+    if (h3HasSub) html += '</div></div>'; // close sub-inner + sub
+    h3Open = false; h3HasSub = false;
+  }
+  function closeH2() {
+    if (h2HasSub) html += '</div></div>'; // close sub-inner + sub
+    html += '</div>'; // close group
+    h2Open = false; h2HasSub = false;
+  }
+
   sections.forEach(function(s, i){
     if (s.tag === 'H2') {
-      h2Index++;
-      var hasSub = i + 1 < sections.length && (sections[i+1].tag === 'H3' || sections[i+1].tag === 'H4');
-      html += '<div class="post-sidebar__group" data-group="' + s.el.id + '">';
+      if (h2Open) closeH2();
+      h2Open = true;
+      h2HasSub = i + 1 < sections.length && (sections[i+1].tag === 'H3' || sections[i+1].tag === 'H4');
+      html += '<div class="post-sidebar__group">';
       html += '<div class="post-sidebar__item" data-target="' + s.el.id + '">';
-      html += '<span class="post-sidebar__toggle">' + (hasSub ? '›' : '') + '</span>';
+      html += '<span class="post-sidebar__toggle">' + (h2HasSub ? '›' : '') + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
-      if (hasSub) {
+      if (h2HasSub) {
         html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
+        html += '<div class="post-sidebar__sub-inner">';
       }
     } else if (s.tag === 'H3') {
-      var hasH4 = i + 1 < sections.length && sections[i+1].tag === 'H4';
+      if (h3Open) closeH3();
+      h3Open = true;
+      h3HasSub = i + 1 < sections.length && sections[i+1].tag === 'H4';
       html += '<div class="post-sidebar__item post-sidebar__item--h3" data-target="' + s.el.id + '">';
-      html += '<span class="post-sidebar__toggle">' + (hasH4 ? '›' : '') + '</span>';
+      html += '<span class="post-sidebar__toggle">' + (h3HasSub ? '›' : '') + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
-      if (hasH4) {
+      if (h3HasSub) {
         html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
+        html += '<div class="post-sidebar__sub-inner">';
       }
-      if (i + 1 >= sections.length || (sections[i+1].tag !== 'H3' && sections[i+1].tag !== 'H4')) {
-        html += '</div></div>'; // close sub + group
+      if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
+        closeH3();
+        closeH2();
       }
     } else if (s.tag === 'H4') {
       html += '<div class="post-sidebar__item post-sidebar__item--h4" data-target="' + s.el.id + '">';
       html += '<span class="post-sidebar__toggle"></span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
-      if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
-        html += '</div></div>'; // close sub + group
+      if (i + 1 >= sections.length || (sections[i+1].tag !== 'H4' && sections[i+1].tag !== 'H3')) {
+        closeH3();
       }
-    }
-    if (s.tag === 'H2') {
-      if (!(i + 1 < sections.length && (sections[i+1].tag === 'H3' || sections[i+1].tag === 'H4'))) {
-        html += '</div>'; // close group (no sub)
+      if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
+        closeH2();
       }
     }
   });
+  if (h3Open) closeH3();
+  if (h2Open) closeH2();
 
   sidebar.innerHTML = html;
 

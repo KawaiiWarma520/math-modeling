@@ -785,13 +785,18 @@ img { max-width: 100%; height: auto; }
   transform: rotate(90deg);
 }
 
-/* 子标题容器 */
+/* 子标题容器（grid动画折叠） */
 .post-sidebar__sub {
-  display: none;
-  margin: 1px 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .post-sidebar__sub.is-expanded {
-  display: block;
+  grid-template-rows: 1fr;
+}
+
+.post-sidebar__sub-inner {
+  overflow: hidden;
 }
 
 .post-sidebar__group {

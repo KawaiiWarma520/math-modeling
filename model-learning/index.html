@@ -82,7 +82,6 @@ JS 前端分页：每页 12 篇
       var itemsInSec = sec.querySelectorAll('.post-item');
 
       if (secEnd <= start || secStart >= end) {
-        // Section fully outside range → hide all
         sec.style.display = 'none';
       } else {
         sec.style.display = 'block';
@@ -94,33 +93,28 @@ JS 前端分页：每页 12 篇
       }
     });
 
-    // Update pagination
-    pagiEl.querySelectorAll('a').forEach(function(a){ a.classList.remove('active'); });
-    pagiEl.querySelector('.page-btn[data-page="' + page + '"]')?.classList.add('active');
+    // Rebuild pagination
+    buildPagination(page);
+  }
 
-    // Update prev/next state
-    var prevBtn = pagiEl.querySelector('.page-prev');
-    var nextBtn = pagiEl.querySelector('.page-next');
-    if (prevBtn) prevBtn.style.opacity = page <= 1 ? '0.3' : '1';
-    if (nextBtn) nextBtn.style.opacity = page >= totalPages ? '0.3' : '1';
+  function buildPagination(current) {
+    var pHtml = '';
+    pHtml += '<a href="#" class="page-prev page-btn" data-page="' + Math.max(1, current - 1) + '" style="font-weight:600;' + (current <= 1 ? 'opacity:0.3;' : '') + '">‹ 上一页</a>';
+    for (var p = 1; p <= totalPages; p++) {
+      if (p === 1 || p === totalPages || Math.abs(p - current) <= 1) {
+        pHtml += '<a href="#" class="page-btn' + (p === current ? ' active' : '') + '" data-page="' + p + '">' + p + '</a>';
+      } else if (Math.abs(p - current) === 2) {
+        pHtml += '<span style="border:none;">…</span>';
+      }
+    }
+    pHtml += '<a href="#" class="page-next page-btn" data-page="' + Math.min(totalPages, current + 1) + '" style="font-weight:600;' + (current >= totalPages ? 'opacity:0.3;' : '') + '">下一页 ›</a>';
+    pagiEl.innerHTML = pHtml;
   }
 
   var container = document.querySelector('.page-content');
   var pagiEl = document.createElement('div');
   pagiEl.className = 'pagination';
   pagiEl.style.cssText = 'display:flex;justify-content:center;gap:4px;margin-top:32px;flex-wrap:wrap;';
-
-  var pHtml = '';
-  pHtml += '<a href="#" class="page-prev page-btn" data-page="' + Math.max(1, 1) + '" style="font-weight:600;">‹ 上一页</a>';
-  for (var p = 1; p <= totalPages; p++) {
-    if (p === 1 || p === totalPages || Math.abs(p - 1) <= 1) {
-      pHtml += '<a href="#" class="page-btn' + (p === 1 ? ' active' : '') + '" data-page="' + p + '">' + p + '</a>';
-    } else if (Math.abs(p - 1) === 2) {
-      pHtml += '<span style="border:none;">…</span>';
-    }
-  }
-  pHtml += '<a href="#" class="page-next page-btn" data-page="' + Math.min(totalPages, 1) + '" style="font-weight:600;">下一页 ›</a>';
-  pagiEl.innerHTML = pHtml;
 
   pagiEl.addEventListener('click', function(e){
     var link = e.target.closest('.page-btn');

@@ -4,6 +4,8 @@ baseurl: "/math-modeling"
 url: "https://kawaiiwarma520.github.io"
 lang: zh-CN
 
+future: true
+
 # 不使用主题，完全自定义
 markdown: kramdown
 kramdown:

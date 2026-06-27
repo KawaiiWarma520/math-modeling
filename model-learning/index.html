@@ -12,99 +12,73 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
 
 {% assign subcat_order = "优化模型,预测模型,统计模型,机器学习,无监督学习,集成学习,特征工程,模型评估,模型选择,模型组合,降维,图论模型,评价模型,DEA,TOPSIS,分类模型,其他模型" | split: "," %}
 
-<div class="model-wrapper">
-
-  <div class="model-area">
-    <nav class="model-nav" id="modelNav"></nav>
-  </div>
-
-  <main class="model-main">
-    {% for subcat in subcat_order %}
-      {% assign posts_in_subcat = model_posts | where: "tags", subcat %}
-      {% if posts_in_subcat.size > 0 %}
-    <section class="model-section" data-subcat="{{ subcat }}">
-      <h2 class="section-title" style="scroll-margin-top: 84px;">{{ subcat }} <span style="font-size:0.8rem;color:var(--text-muted);font-weight:400;">({{ posts_in_subcat.size }}篇)</span></h2>
-      <ul class="post-list">
-        {% for post in posts_in_subcat %}
-        <li class="post-item">
-          <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-          <div class="post-meta"><span>📅 {{ post.date | date: "%Y-%m-%d" }}</span></div>
-          {% if post.description %}<div class="post-excerpt">{{ post.description }}</div>{% endif %}
-        </li>
-        {% endfor %}
-      </ul>
-    </section>
-      {% endif %}
+{% for subcat in subcat_order %}
+  {% assign posts_in_subcat = model_posts | where: "tags", subcat %}
+  {% if posts_in_subcat.size > 0 %}
+<section class="model-section" data-subcat="{{ subcat }}">
+  <h2 class="section-title" style="scroll-margin-top: 84px;">{{ subcat }} <span style="font-size:0.8rem;color:var(--text-muted);font-weight:400;">({{ posts_in_subcat.size }}篇)</span></h2>
+  <ul class="post-list">
+    {% for post in posts_in_subcat %}
+    <li class="post-item">
+      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+      <div class="post-meta"><span>📅 {{ post.date | date: "%Y-%m-%d" }}</span></div>
+      {% if post.description %}<div class="post-excerpt">{{ post.description }}</div>{% endif %}
+    </li>
     {% endfor %}
-  </main>
-</div>
+  </ul>
+</section>
+  {% endif %}
+{% endfor %}
 
 <div class="pagination" id="modelPagination"></div>
 
 <script>
 (function(){
   var sections = document.querySelectorAll('.model-section');
-  var nav = document.getElementById('modelNav');
-  if (!sections.length || !nav) return;
+  if (!sections.length) return;
 
-  // ===== Build sidebar =====
-  var html = '';
+  // Collect all post items with their index
   var allPosts = [];
-  sections.forEach(function(sec, si){
-    var cat = sec.getAttribute('data-subcat');
-    var items = sec.querySelectorAll('.post-item');
-    var hasSub = items.length > 0;
-    html += '<div class="model-nav-group">';
-    html += '<div class="model-nav-item model-nav-item--cat" data-cat="' + si + '">';
-    html += '<span class="model-nav-toggle">' + (hasSub ? '›' : '') + '</span>';
-    html += '<span class="model-nav-label">' + cat + '</span>';
-    html += '</div>';
-    if (hasSub) {
-      html += '<div class="model-nav-sub" data-parent="' + si + '">';
-      html += '<div class="model-nav-inner">';
-      items.forEach(function(item, pi){
-        var link = item.querySelector('h3 a');
-        if (link) {
-          var idx = allPosts.length;
-          allPosts.push({ el: item, cat: si });
-          html += '<div class="model-nav-item model-nav-item--post" data-idx="' + idx + '" data-href="' + link.getAttribute('href') + '">';
-          html += '<span class="model-nav-label">' + link.textContent.trim() + '</span>';
-          html += '</div>';
-        }
-      });
-      html += '</div></div>';
-    }
-    html += '</div>';
+  sections.forEach(function(sec){
+    sec.querySelectorAll('.post-item').forEach(function(item){
+      allPosts.push({ el: item, sec: sec });
+    });
   });
-  nav.innerHTML = html;
 
-  // ===== Pagination =====
   var perPage = 12;
   var totalPages = Math.ceil(allPosts.length / perPage);
+  if (totalPages <= 1) return;
+
   var pagi = document.getElementById('modelPagination');
 
   function showPage(page) {
+    // Scroll to top of page
+    var banner = document.querySelector('.page-banner');
+    if (banner) {
+      banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     var start = (page - 1) * perPage;
     var end = Math.min(start + perPage, allPosts.length);
 
     // Show/hide sections and items
-    sections.forEach(function(sec, si){
-      var itemsInSec = sec.querySelectorAll('.post-item');
-      var anyVisible = false;
-      itemsInSec.forEach(function(item, pi){
-        // find the idx in allPosts
-        for (var k = 0; k < allPosts.length; k++) {
-          if (allPosts[k].el === item) {
-            item.style.display = (k >= start && k < end) ? '' : 'none';
-            if (k >= start && k < end) anyVisible = true;
-            break;
-          }
-        }
-      });
-      sec.style.display = anyVisible ? 'block' : 'none';
+    var secState = {};
+    allPosts.forEach(function(item, idx){
+      var visible = (idx >= start && idx < end);
+      item.el.style.display = visible ? '' : 'none';
+      if (visible) secState[idx] = true;
     });
 
-    // Rebuild pagination
+    // Count visible items per section
+    sections.forEach(function(sec){
+      var visCount = 0;
+      sec.querySelectorAll('.post-item').forEach(function(item){
+        if (item.style.display !== 'none') visCount++;
+      });
+      sec.style.display = visCount > 0 ? 'block' : 'none';
+    });
+
+    // Build pagination
     var phtml = '';
     phtml += '<a href="#" class="page-btn" data-page="' + Math.max(1, page - 1) + '" style="font-weight:600;' + (page <= 1 ? 'opacity:0.3;pointer-events:none;' : '') + '">‹ 上一页</a>';
     for (var p = 1; p <= totalPages; p++) {
@@ -124,150 +98,14 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
     e.preventDefault();
     var p = parseInt(btn.getAttribute('data-page'));
     if (p >= 1 && p <= totalPages) showPage(p);
-    // TODO: update nav highlight
   });
-
-  // ===== Nav: fold/unfold =====
-  nav.querySelectorAll('.model-nav-item--cat').forEach(function(item){
-    item.addEventListener('click', function(){
-      var si = this.getAttribute('data-cat');
-      var sub = nav.querySelector('.model-nav-sub[data-parent="' + si + '"]');
-      if (!sub) return;
-      sub.classList.toggle('is-expanded');
-      var tog = this.querySelector('.model-nav-toggle');
-      if (tog) tog.classList.toggle('is-open');
-    });
-  });
-
-  // ===== Nav: click post =====
-  nav.querySelectorAll('.model-nav-item--post').forEach(function(item){
-    item.addEventListener('click', function(){
-      var href = this.getAttribute('data-href');
-      if (href && href !== '#') {
-        window.location.href = href;
-        return;
-      }
-      // fallback: scroll (for demo)
-      var idx = parseInt(this.getAttribute('data-idx'));
-      if (allPosts[idx] && allPosts[idx].el) {
-        allPosts[idx].el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        nav.querySelectorAll('.model-nav-item--post').forEach(function(p){ p.classList.remove('is-active'); });
-        this.classList.add('is-active');
-      }
-    });
-  });
-
-  // Expand all by default
-  nav.querySelectorAll('.model-nav-sub').forEach(function(s){ s.classList.add('is-expanded'); });
-  nav.querySelectorAll('.model-nav-toggle').forEach(function(t){ t.classList.add('is-open'); });
 
   showPage(1);
 })();
 </script>
 
 <style>
-.model-wrapper {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0;
-}
-
-.model-area {
-  position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 100px);
-  margin-right: 80px;
-  margin-left: -120px;
-  width: 220px;
-  flex-shrink: 0;
-}
-
-.model-nav {
-  width: 220px;
-  padding: 4px 0 24px;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-  white-space: normal;
-  word-break: break-word;
-}
-.model-nav::-webkit-scrollbar { width: 5px; }
-.model-nav::-webkit-scrollbar-track { background: transparent; }
-.model-nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-
-.model-nav-group { margin-bottom: 1px; }
-
-.model-nav-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  padding: 6px 10px;
-  cursor: pointer;
-  border-left: 3px solid transparent;
-  transition: background 0.15s, color 0.15s;
-  line-height: 1.5;
-  color: var(--text-light);
-  font-size: 15px;
-}
-.model-nav-item:hover { background: #eef2ff; color: var(--primary-dark); }
-.model-nav-item.is-active {
-  background: var(--primary-lighter);
-  color: var(--primary-dark);
-  font-weight: 600;
-  border-left-color: var(--primary);
-}
-
-.model-nav-item--cat {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  padding-left: 10px;
-}
-
-.model-nav-item--post {
-  padding-left: 28px;
-  font-size: 13px;
-}
-
-.model-nav-toggle {
-  width: 18px;
-  flex-shrink: 0;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-align: center;
-  line-height: 1.5;
-  transition: transform 0.25s ease;
-  display: inline-block;
-}
-.model-nav-toggle.is-open { transform: rotate(90deg); }
-
-.model-nav-label {
-  flex: 1;
-  min-width: 0;
-  word-break: break-word;
-  line-height: 1.5;
-}
-
-.model-nav-sub {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.model-nav-sub.is-expanded { grid-template-rows: 1fr; }
-.model-nav-inner { overflow: hidden; }
-
-.model-main {
-  flex: 1;
-  min-width: 0;
-  max-width: 900px;
-}
-
-#modelPagination {
+.pagination {
   display: flex;
   justify-content: center;
   gap: 6px;
@@ -275,7 +113,7 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
   flex-wrap: wrap;
   max-width: 900px;
 }
-#modelPagination a {
+.pagination a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -289,16 +127,10 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
   color: var(--text);
   transition: all 0.2s;
 }
-#modelPagination a:hover { background: var(--primary-lighter); border-color: var(--primary); color: var(--primary); }
-#modelPagination .page-active {
+.pagination a:hover { background: var(--primary-lighter); border-color: var(--primary); color: var(--primary); }
+.pagination .page-active {
   background: var(--primary);
   color: #fff;
   border-color: var(--primary);
-}
-
-@media (max-width: 860px) {
-  .model-area { display: none; }
-  .model-wrapper { flex-direction: column; }
-  .model-main { max-width: 100%; }
 }
 </style>

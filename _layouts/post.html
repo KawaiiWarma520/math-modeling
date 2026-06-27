@@ -86,28 +86,48 @@ layout: default
     sections.push({ el: h, tag: h.tagName });
   });
 
-  // Phase 2: build sidebar HTML (with animation support)
+  // Phase 2: build sidebar HTML with proper H1/H2/H3/H4 hierarchy
+  // Rule: H1→top(--h2), H2→sub(--h3), H3→subsub(--h4), H4→deepest(--h4)
   var html = '';
-  var h2Open = false, h2HasSub = false;
-  var h3Open = false, h3HasSub = false;
+  var h1Open = false, h1HasSub = false;  // manages H1 and its children
+  var h2Open = false, h2HasSub = false;  // manages H2 under H1 and its children
 
-  function closeH3() {
-    if (h3HasSub) html += '</div></div>'; // close sub-inner + sub
-    h3Open = false; h3HasSub = false;
-  }
   function closeH2() {
     if (h2HasSub) html += '</div></div>'; // close sub-inner + sub
-    html += '</div>'; // close group
     h2Open = false; h2HasSub = false;
+  }
+  function closeH1() {
+    if (h1HasSub) {
+      if (h2Open) closeH2();
+      html += '</div></div>'; // close sub-inner + sub
+    }
+    html += '</div>'; // close group
+    h1Open = false; h1HasSub = false;
   }
 
   sections.forEach(function(s, i){
-    if (s.tag === 'H1' || s.tag === 'H2') {
-      if (h2Open) closeH2();
-      h2Open = true;
-      h2HasSub = i + 1 < sections.length && (sections[i+1].tag === 'H3' || sections[i+1].tag === 'H4');
+    var nextTag = i + 1 < sections.length ? sections[i+1].tag : null;
+
+    if (s.tag === 'H1') {
+      // H1 → top level with --h2 style
+      if (h1Open) closeH1();
+      h1Open = true;
+      h1HasSub = nextTag === 'H2' || nextTag === 'H3' || nextTag === 'H4';
       html += '<div class="post-sidebar__group">';
       html += '<div class="post-sidebar__item post-sidebar__item--h2" data-target="' + s.el.id + '">';
+      html += '<span class="post-sidebar__toggle">' + (h1HasSub ? '›' : '') + '</span>';
+      html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
+      html += '</div>';
+      if (h1HasSub) {
+        html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
+        html += '<div class="post-sidebar__sub-inner">';
+      }
+    } else if (s.tag === 'H2') {
+      // H2 → second level with --h3 style, inside H1
+      if (h2Open) closeH2();
+      h2Open = true;
+      h2HasSub = nextTag === 'H3' || nextTag === 'H4';
+      html += '<div class="post-sidebar__item post-sidebar__item--h3" data-target="' + s.el.id + '">';
       html += '<span class="post-sidebar__toggle">' + (h2HasSub ? '›' : '') + '</span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
@@ -115,37 +135,40 @@ layout: default
         html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
         html += '<div class="post-sidebar__sub-inner">';
       }
+      if (!nextTag || nextTag === 'H1') { closeH2(); closeH1(); }
     } else if (s.tag === 'H3') {
-      if (h3Open) closeH3();
-      h3Open = true;
-      h3HasSub = i + 1 < sections.length && sections[i+1].tag === 'H4';
-      html += '<div class="post-sidebar__item post-sidebar__item--h3" data-target="' + s.el.id + '">';
-      html += '<span class="post-sidebar__toggle">' + (h3HasSub ? '›' : '') + '</span>';
-      html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
-      html += '</div>';
-      if (h3HasSub) {
-        html += '<div class="post-sidebar__sub" data-parent="' + s.el.id + '">';
-        html += '<div class="post-sidebar__sub-inner">';
+      // H3 → third level with --h4 style, inside H2 under H1
+      if (h2Open && !h2HasSub) { } // already inside H2
+      if (!h2Open) {
+        // orphan H3 with no H2 parent → just show as --h4
+        html += '<div class="post-sidebar__item post-sidebar__item--h4" data-target="' + s.el.id + '">';
+        html += '<span class="post-sidebar__toggle"></span>';
+        html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
+        html += '</div>';
+      } else {
+        html += '<div class="post-sidebar__item post-sidebar__item--h4" data-target="' + s.el.id + '">';
+        html += '<span class="post-sidebar__toggle"></span>';
+        html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
+        html += '</div>';
       }
-      if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
-        closeH3();
-        closeH2();
+      if (!nextTag || nextTag === 'H2' || nextTag === 'H1') {
+        if (h2Open) closeH2();
+        if (nextTag === 'H1') closeH1();
       }
     } else if (s.tag === 'H4') {
       html += '<div class="post-sidebar__item post-sidebar__item--h4" data-target="' + s.el.id + '">';
       html += '<span class="post-sidebar__toggle"></span>';
       html += '<span class="post-sidebar__label-text">' + s.el.textContent.trim() + '</span>';
       html += '</div>';
-      if (i + 1 >= sections.length || (sections[i+1].tag !== 'H4' && sections[i+1].tag !== 'H3')) {
-        closeH3();
-      }
-      if (i + 1 >= sections.length || sections[i+1].tag === 'H2') {
-        closeH2();
+      if (!nextTag || nextTag !== 'H4') {
+        if (h2Open) closeH2();
+        if (nextTag === 'H1') closeH1();
       }
     }
   });
-  if (h3Open) closeH3();
+  // clean up state vars
   if (h2Open) closeH2();
+  if (h1Open) closeH1();
 
   sidebar.innerHTML = html;
 

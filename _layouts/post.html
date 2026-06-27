@@ -102,7 +102,7 @@ layout: default
   }
 
   sections.forEach(function(s, i){
-    if (s.tag === 'H2') {
+    if (s.tag === 'H1' || s.tag === 'H2') {
       if (h2Open) closeH2();
       h2Open = true;
       h2HasSub = i + 1 < sections.length && (sections[i+1].tag === 'H3' || sections[i+1].tag === 'H4');

@@ -10,66 +10,392 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
 <p style="color: var(--text-light); text-align: center; padding: 60px 0;">暂无内容，努力更新中 🚀</p>
 {% endif %}
 
-{% assign subcat_order = "优化模型,预测模型,统计模型,机器学习,无监督学习,集成学习,特征工程,模型评估,模型选择,模型组合,降维,图论模型,评价模型,DEA,TOPSIS,分类模型,其他模型" | split: "," %}
-
-{% for subcat in subcat_order %}
-  {% assign posts_in_subcat = model_posts | where: "tags", subcat %}
-  {% if posts_in_subcat.size > 0 %}
-<section class="model-section" data-subcat="{{ subcat }}">
-  <h2 class="section-title" style="scroll-margin-top: 84px;">{{ subcat }} <span style="font-size:0.8rem;color:var(--text-muted);font-weight:400;">({{ posts_in_subcat.size }}篇)</span></h2>
-  <ul class="post-list">
-    {% for post in posts_in_subcat %}
-    <li class="post-item">
-      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-      <div class="post-meta"><span>📅 {{ post.date | date: "%Y-%m-%d" }}</span></div>
-      {% if post.description %}<div class="post-excerpt">{{ post.description }}</div>{% endif %}
-    </li>
-    {% endfor %}
-  </ul>
-</section>
-  {% endif %}
+<!-- 用 Liquid 输出文章数据给 JS -->
+<script>
+var allPostsData = [
+{% for post in model_posts %}
+  {
+    title: {{ post.title | jsonify }},
+    url: "{{ post.url | relative_url }}",
+    date: "{{ post.date | date: '%Y-%m-%d' }}",
+    desc: {{ post.description | jsonify }},
+    tags: {{ post.tags | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
 {% endfor %}
+];
+</script>
 
-<div class="pagination" id="modelPagination"></div>
+<div class="post-wrapper">
+  <div class="sidebar-area">
+    <nav class="post-sidebar" aria-label="栏目导航"></nav>
+  </div>
+
+  <main class="post-main" id="mainContent">
+    <div id="modelContent"></div>
+    <div class="pagination" id="modelPagination"></div>
+  </main>
+</div>
+
+<div class="sidebar-toggle" id="sidebarToggle" title="收起导航">
+  <span class="toggle-icon">
+    <svg viewBox="0 0 16 16"><polyline points="6,4 10,8 6,12"/></svg>
+  </span>
+</div>
+
+<div class="sidebar-mask" id="sidebarMask"></div>
+
+<button class="sidebar-mobile-btn" id="sidebarMobileBtn" aria-label="打开目录">
+  <span class="mobile-btn-dot"></span>
+  <span class="mobile-btn-dot"></span>
+  <span class="mobile-btn-dot"></span>
+</button>
+
+<style>
+/* 覆盖 page layout 的 container 样式，使用 post-wrapper 布局 */
+.page-banner + .main-content .container {
+  max-width: 100%;
+  padding: 0;
+}
+
+.post-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px 0;
+  min-height: 300px;
+}
+
+.post-sidebar {
+  width: 220px;
+  padding: 4px 0 24px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  white-space: normal;
+  word-break: break-word;
+}
+.post-sidebar::-webkit-scrollbar { width: 5px; }
+.post-sidebar::-webkit-scrollbar-track { background: transparent; }
+.post-sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+.post-sidebar__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 15px;
+  color: var(--text-light);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1.5;
+}
+.post-sidebar__item:hover { background: #eef2ff; color: var(--primary-dark); }
+.post-sidebar__item.is-active {
+  background: var(--primary-lighter);
+  color: var(--primary-dark);
+  font-weight: 600;
+  border-left-color: var(--primary);
+}
+.post-sidebar__item--h2 { padding-left: 10px; font-size: 15px; font-weight: 600; }
+.post-sidebar__item--h3 { padding-left: 28px; font-size: 14px; }
+.post-sidebar__label-text { flex: 1; min-width: 0; word-break: break-word; line-height: 1.5; }
+
+.post-sidebar__toggle {
+  width: 18px;
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+  transition: transform 0.25s ease;
+  user-select: none;
+  display: inline-block;
+}
+.post-sidebar__toggle.is-open { transform: rotate(90deg); }
+
+.post-sidebar__sub {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.post-sidebar__sub.is-expanded { grid-template-rows: 1fr; }
+.post-sidebar__sub-inner { overflow: hidden; }
+.post-sidebar__group { margin-bottom: 1px; }
+
+.sidebar-area {
+  position: fixed;
+  left: 36px;
+  top: 80px;
+  height: calc(100vh - 100px);
+  z-index: 1000;
+  width: 220px;
+  overflow: hidden;
+  transition: width 0.25s ease, opacity 0.25s ease;
+}
+.sidebar-area.is-collapsed { width: 0; opacity: 0; }
+
+.sidebar-toggle {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  width: 36px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 1px 2px 8px rgba(0,0,0,0.07);
+  color: var(--text-muted);
+  transition: background 0.2s;
+  user-select: none;
+}
+.sidebar-toggle:hover { background: var(--primary-lighter); color: var(--primary); }
+.sidebar-toggle .toggle-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--primary-lighter);
+  transition: all 0.25s;
+}
+.sidebar-toggle:hover .toggle-icon { background: var(--gradient); }
+.sidebar-toggle:hover .toggle-icon svg { stroke: #fff; }
+.sidebar-toggle .toggle-icon svg {
+  width: 11px; height: 11px;
+  stroke: var(--primary-light);
+  stroke-width: 2.5; fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 0.25s ease;
+}
+.sidebar-toggle.is-collapsed .toggle-icon { background: var(--gradient); }
+.sidebar-toggle.is-collapsed .toggle-icon svg { stroke: #fff; transform: rotate(180deg); }
+
+.post-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-left: 0;
+}
+
+.sidebar-mobile-btn {
+  display: none;
+  position: fixed;
+  right: 16px;
+  bottom: 24px;
+  z-index: 999;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gradient);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: transform 0.2s;
+}
+.sidebar-mobile-btn:active { transform: scale(0.92); }
+.sidebar-mobile-btn .mobile-btn-dot { display: block; width: 16px; height: 2px; background: #fff; border-radius: 1px; }
+
+.sidebar-mask {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.sidebar-mask.is-visible { opacity: 1; pointer-events: auto; }
+
+.model-section { margin-bottom: 36px; }
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+.post-list { list-style: none; }
+.post-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  transition: box-shadow 0.2s;
+}
+.post-item:hover { box-shadow: var(--shadow); }
+.post-item h3 { margin-bottom: 6px; }
+.post-item h3 a { color: var(--text); font-size: 1.05rem; font-weight: 600; }
+.post-item h3 a:hover { color: var(--primary); }
+.post-meta { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px; }
+.post-excerpt { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 32px auto;
+  flex-wrap: wrap;
+  max-width: 900px;
+}
+.pagination a {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  min-width: 36px; height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.pagination a:hover { background: var(--primary-lighter); border-color: var(--primary); color: var(--primary); }
+.pagination .page-active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+@media (max-width: 860px) {
+  .post-wrapper { width: 100%; padding: 24px 16px 0; }
+  .sidebar-area { display: none; }
+  .sidebar-toggle { display: none; }
+  .post-main { width: 100%; max-width: 100%; padding-left: 0; }
+  .sidebar-mobile-btn { display: flex; }
+
+  .sidebar-area.is-mobile {
+    display: flex; flex-direction: column;
+    position: fixed; left: 0; top: 0;
+    width: 290px; height: 100vh;
+    z-index: 999;
+    background: var(--white);
+    box-shadow: 2px 0 24px rgba(0,0,0,0.18);
+    overflow: hidden;
+    opacity: 1;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+  }
+  .sidebar-area.is-mobile.is-open { transform: translateX(0); }
+  .sidebar-area.is-mobile::before {
+    content: '📖 栏目导航';
+    display: block; flex-shrink: 0;
+    padding: 20px 16px 14px;
+    font-size: 1rem; font-weight: 700; color: #fff;
+    background: var(--gradient);
+  }
+  .sidebar-area.is-mobile .post-sidebar {
+    flex: 1; height: auto; padding: 8px 0 24px; overflow-y: auto;
+  }
+  .sidebar-area.is-mobile .drawer-close {
+    position: absolute; top: 18px; right: 14px;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.2);
+    border: none; border-radius: 50%;
+    cursor: pointer; color: #fff; font-size: 16px; line-height: 1; z-index: 10;
+  }
+  .sidebar-area.is-mobile .drawer-close:hover { background: rgba(255,255,255,0.35); }
+  .sidebar-mask { display: block; }
+  h1 { font-size: 1.5rem; }
+}
+</style>
 
 <script>
+// ===== 8 个大组标签映射 =====
+var groupsConfig = [
+  { name: '优化模型', tags: ['优化模型'] },
+  { name: '评价与决策模型', tags: ['评价模型', 'DEA', 'TOPSIS', 'AHP', 'CRITIC', '熵权法', '模糊综合评价', '灰色关联分析', '权重计算', '效率评价', '决策分析', '多属性决策'] },
+  { name: '预测与回归模型', tags: ['预测模型', '回归分析', '时间序列', 'ARIMA', 'Holt-Winters', 'OLS', '最小二乘法', '灰色预测', '线性回归', '指数平滑', '自回归'] },
+  { name: '机器学习模型', tags: ['机器学习', '无监督学习', '集成学习', '特征工程', '分类模型', 'KNN', '朴素贝叶斯', 'SVM', '支持向量机', '决策树', '随机森林', 'XGBoost', 'LightGBM', '梯度提升', 'Bagging', 'Boosting', 'Stacking', 'K-Means', 'DBSCAN', '层次聚类', 'PCA', '降维', '主成分分析', '神经网络', '深度学习', '异常检测', '数据分组', '数据相似性', '聚类分析'] },
+  { name: '统计模型', tags: ['统计模型', 'ANOVA', '方差分析', '卡方检验', 'Chi-square', '假设检验', 't检验', 'p值', '显著性检验', '列联表', '因子分析', '数据处理'] },
+  { name: '其他模型', tags: ['其他模型', '图论模型', '最短路径', '最小生成树', '最大流', 'Dijkstra', 'TSP', '旅行商问题', '目标规划', '非线性规划', '非线性模型', '动态规划', '整数规划', '指派问题', '匈牙利算法', '蒙特卡洛', '随机模拟', '马尔可夫链', '状态转移', '排队论', '泊松过程', '仿真模型'] },
+  { name: '建模实战案例', tags: ['建模流程', '真题拆解', '竞赛技巧'] },
+  { name: '问题类型与建模方法论', tags: ['模型选择', '模型组合', '模型评估', '问题识别', '建模方法论', '决策系统', '一页纸总结', '特征选择'] }
+];
+
+// 将文章按标签分配到对应分组
+function assignGroup(post) {
+  for (var i = 0; i < groupsConfig.length; i++) {
+    for (var j = 0; j < groupsConfig[i].tags.length; j++) {
+      if (post.tags.indexOf(groupsConfig[i].tags[j]) !== -1) {
+        return groupsConfig[i].name;
+      }
+    }
+  }
+  return '其他模型';
+}
+
+var grouped = {};
+allPostsData.forEach(function(p) {
+  var g = assignGroup(p);
+  if (!grouped[g]) grouped[g] = [];
+  grouped[g].push(p);
+});
+
+var groupOrder = groupsConfig.map(function(g) { return g.name; });
+
+// ===== 渲染内容 =====
+var container = document.getElementById('modelContent');
+
+groupOrder.forEach(function(groupName, gi){
+  var posts = grouped[groupName] || [];
+  var secId = 'sec-' + gi;
+
+  var h = '<section class="model-section" id="' + secId + '">';
+  h += '<h2 class="section-title" style="scroll-margin-top: 104px;">' + groupName + ' <span style="font-size:0.8rem;color:var(--text-muted);font-weight:400;">(' + posts.length + '篇)</span></h2>';
+  h += '<ul class="post-list">';
+  posts.forEach(function(p, pi){
+    var aId = 'art-' + gi + '-' + pi;
+    h += '<li class="post-item"><h3><a href="' + p.url + '" id="' + aId + '">' + p.title + '</a></h3>';
+    h += '<div class="post-meta"><span>📅 ' + p.date + '</span></div>';
+    if (p.desc) h += '<div class="post-excerpt">' + p.desc + '</div>';
+    h += '</li>';
+  });
+  h += '</ul></section>';
+  container.insertAdjacentHTML('beforeend', h);
+});
+
+// ===== 分页 =====
 (function(){
   var sections = document.querySelectorAll('.model-section');
   if (!sections.length) return;
 
-  // Collect all post items with their index
-  var allPosts = [];
+  var allItems = [];
   sections.forEach(function(sec){
     sec.querySelectorAll('.post-item').forEach(function(item){
-      allPosts.push({ el: item, sec: sec });
+      allItems.push({ el: item, sec: sec });
     });
   });
 
   var perPage = 12;
-  var totalPages = Math.ceil(allPosts.length / perPage);
+  var totalPages = Math.ceil(allItems.length / perPage);
   if (totalPages <= 1) return;
 
   var pagi = document.getElementById('modelPagination');
 
   function showPage(page) {
-    // Scroll to top of page
     var banner = document.querySelector('.page-banner');
-    if (banner) {
-      banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    if (banner) banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     var start = (page - 1) * perPage;
-    var end = Math.min(start + perPage, allPosts.length);
+    var end = Math.min(start + perPage, allItems.length);
 
-    // Show/hide sections and items
-    var secState = {};
-    allPosts.forEach(function(item, idx){
-      var visible = (idx >= start && idx < end);
-      item.el.style.display = visible ? '' : 'none';
-      if (visible) secState[idx] = true;
+    allItems.forEach(function(item, idx){
+      item.el.style.display = (idx >= start && idx < end) ? '' : 'none';
     });
 
-    // Count visible items per section
     sections.forEach(function(sec){
       var visCount = 0;
       sec.querySelectorAll('.post-item').forEach(function(item){
@@ -78,9 +404,8 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
       sec.style.display = visCount > 0 ? 'block' : 'none';
     });
 
-    // Build pagination
     var phtml = '';
-    phtml += '<a href="#" class="page-btn" data-page="' + Math.max(1, page - 1) + '" style="font-weight:600;' + (page <= 1 ? 'opacity:0.3;pointer-events:none;' : '') + '">‹ 上一页</a>';
+    phtml += '<a href="#" class="page-btn" data-page="' + Math.max(1, page-1) + '" style="font-weight:600;' + (page <= 1 ? 'opacity:0.3;pointer-events:none;' : '') + '">‹ 上一页</a>';
     for (var p = 1; p <= totalPages; p++) {
       if (p === 1 || p === totalPages || Math.abs(p - page) <= 1) {
         phtml += '<a href="#" class="page-btn' + (p === page ? ' page-active' : '') + '" data-page="' + p + '">' + p + '</a>';
@@ -88,7 +413,7 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
         phtml += '<span style="border:none;display:inline-flex;align-items:center;min-width:36px;height:36px;justify-content:center;color:var(--text-muted);">…</span>';
       }
     }
-    phtml += '<a href="#" class="page-btn" data-page="' + Math.min(totalPages, page + 1) + '" style="font-weight:600;' + (page >= totalPages ? 'opacity:0.3;pointer-events:none;' : '') + '">下一页 ›</a>';
+    phtml += '<a href="#" class="page-btn" data-page="' + Math.min(totalPages, page+1) + '" style="font-weight:600;' + (page >= totalPages ? 'opacity:0.3;pointer-events:none;' : '') + '">下一页 ›</a>';
     pagi.innerHTML = phtml;
   }
 
@@ -102,35 +427,136 @@ description: 优化模型、评价模型、预测模型、分类模型、统计�
 
   showPage(1);
 })();
-</script>
 
-<style>
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin: 32px auto;
-  flex-wrap: wrap;
-  max-width: 900px;
-}
-.pagination a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  height: 36px;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 0.85rem;
-  text-decoration: none;
-  color: var(--text);
-  transition: all 0.2s;
-}
-.pagination a:hover { background: var(--primary-lighter); border-color: var(--primary); color: var(--primary); }
-.pagination .page-active {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-}
-</style>
+// ===== 侧边栏构建（可折叠） =====
+(function(){
+  var sidebar = document.querySelector('.post-sidebar');
+  var sidebarArea = document.querySelector('.sidebar-area');
+  if (!sidebar) return;
+
+  var data = [];
+  var sections = document.querySelectorAll('.model-section');
+  sections.forEach(function(sec){
+    var h2 = sec.querySelector('.section-title');
+    if (!h2) return;
+    if (!h2.id) h2.id = sec.id;
+    h2.style.scrollMarginTop = '104px';
+    var catName = h2.textContent.replace(/\(\d+篇\)/g, '').trim();
+    var articles = [];
+    sec.querySelectorAll('.post-item').forEach(function(item){
+      var link = item.querySelector('h3 a');
+      if (!link) return;
+      articles.push({ id: link.id, text: link.textContent.trim() });
+    });
+    data.push({ id: sec.id, name: catName, articles: articles });
+  });
+
+  var html = '';
+  data.forEach(function(d){
+    html += '<div class="post-sidebar__group">';
+    html += '<div class="post-sidebar__item post-sidebar__item--h2" data-target="' + d.id + '">';
+    html += '<span class="post-sidebar__toggle is-open">›</span>';
+    html += '<span class="post-sidebar__label-text">' + d.name + '</span></div>';
+    html += '<div class="post-sidebar__sub is-expanded" data-parent="' + d.id + '">';
+    html += '<div class="post-sidebar__sub-inner">';
+    d.articles.forEach(function(a){
+      html += '<div class="post-sidebar__item post-sidebar__item--h3" data-target="' + a.id + '">';
+      html += '<span class="post-sidebar__toggle" style="visibility:hidden;">›</span>';
+      html += '<span class="post-sidebar__label-text">' + a.text + '</span></div>';
+    });
+    html += '</div></div></div>';
+  });
+  sidebar.innerHTML = html;
+
+  var allLinks = sidebar.querySelectorAll('[data-target]');
+  var highlightLocked = false;
+
+  allLinks.forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var targetId = this.getAttribute('data-target');
+      var sub = sidebar.querySelector('.post-sidebar__sub[data-parent="' + targetId + '"]');
+      if (sub) {
+        sub.classList.toggle('is-expanded');
+        var toggle = this.querySelector('.post-sidebar__toggle');
+        if (toggle) toggle.classList.toggle('is-open');
+        return;
+      }
+      var targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        highlightLocked = true;
+        allLinks.forEach(function(l){ l.classList.remove('is-active'); });
+        this.classList.add('is-active');
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function(){ highlightLocked = false; }, 3000);
+      }
+    });
+  });
+
+  var toggleBtn = document.getElementById('sidebarToggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function(){
+      sidebarArea.classList.toggle('is-collapsed');
+      toggleBtn.classList.toggle('is-collapsed');
+    });
+  }
+
+  var mobileBtn = document.getElementById('sidebarMobileBtn');
+  var mask = document.getElementById('sidebarMask');
+  var closeBtn = document.createElement('button');
+  closeBtn.className = 'drawer-close';
+  closeBtn.innerHTML = '✕';
+  closeBtn.setAttribute('aria-label', '关闭目录');
+
+  function openDrawer() {
+    sidebarArea.classList.add('is-mobile');
+    sidebarArea.classList.add('is-open');
+    mask.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+    var hasClose = sidebarArea.querySelector('.drawer-close');
+    if (!hasClose) sidebarArea.insertBefore(closeBtn, sidebarArea.firstChild);
+  }
+  function closeDrawer() {
+    sidebarArea.classList.remove('is-open');
+    mask.classList.remove('is-visible');
+    document.body.style.overflow = '';
+    setTimeout(function(){
+      sidebarArea.classList.remove('is-mobile');
+      if (closeBtn.parentNode) closeBtn.parentNode.removeChild(closeBtn);
+    }, 350);
+  }
+
+  if (mobileBtn) mobileBtn.addEventListener('click', function(e){ e.stopPropagation(); openDrawer(); });
+  if (mask) mask.addEventListener('click', closeDrawer);
+  closeBtn.addEventListener('click', closeDrawer);
+
+  allLinks.forEach(function(link){
+    link.addEventListener('click', function(){
+      var targetId = this.getAttribute('data-target');
+      var sub = targetId ? sidebar.querySelector('.post-sidebar__sub[data-parent="' + targetId + '"]') : null;
+      if (!sub && window.innerWidth <= 860) setTimeout(closeDrawer, 300);
+    });
+  });
+
+  var allSections = [];
+  sidebar.querySelectorAll('.post-sidebar__item--h2').forEach(function(link){
+    var el = document.getElementById(link.getAttribute('data-target'));
+    if (el) allSections.push({ item: link, el: el });
+  });
+
+  function updateActive(){
+    if (highlightLocked) return;
+    var scrollY = window.scrollY + 100;
+    var active = allSections[0] || null;
+    for (var i = 0; i < allSections.length; i++) {
+      var elTop = allSections[i].el.getBoundingClientRect().top + window.scrollY;
+      if (elTop <= scrollY) active = allSections[i]; else break;
+    }
+    allSections.forEach(function(s){ s.item.classList.remove('is-active'); });
+    if (active) active.item.classList.add('is-active');
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+})();
+</script>

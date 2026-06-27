@@ -2,8 +2,7 @@
 layout: post
 title: 目标规划：当所有目标都很重要时，该如何取舍？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 目标规划

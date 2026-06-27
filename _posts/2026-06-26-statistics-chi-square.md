@@ -2,8 +2,7 @@
 layout: post
 title: 卡方检验：两个分类变量之间到底有没有关系？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 统计模型
   - 卡方检验

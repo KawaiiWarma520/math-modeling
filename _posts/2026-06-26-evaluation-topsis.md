@@ -2,8 +2,7 @@
 layout: post
 title: TOPSIS：如何在多个优秀方案中选出最优解？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 评价模型
   - TOPSIS

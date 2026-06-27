@@ -2,8 +2,7 @@
 layout: post
 title: 马尔可夫链：未来只和“现在状态”有关的系统如何建模？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 马尔可夫链
   - 状态转移

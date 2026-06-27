@@ -2,8 +2,7 @@
 layout: post
 title: 数学建模一页纸速查系统：考试时如何3分钟选对模型？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 模型选择
   - 决策系统

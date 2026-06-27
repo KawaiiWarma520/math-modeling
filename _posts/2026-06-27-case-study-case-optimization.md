@@ -2,8 +2,7 @@
 layout: post
 title: 优化类真题拆解：从读题到建模的完整流程演示
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 线性规划

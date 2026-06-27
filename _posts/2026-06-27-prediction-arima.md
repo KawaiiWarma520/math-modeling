@@ -2,8 +2,7 @@
 layout: post
 title: ARIMA模型：如何用“过去的规律”预测未来趋势？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - ARIMA

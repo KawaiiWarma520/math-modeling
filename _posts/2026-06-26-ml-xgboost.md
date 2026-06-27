@@ -2,8 +2,7 @@
 layout: post
 title: XGBoost：为什么“不断纠错”的模型在竞赛中这么强？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 机器学习
   - XGBoost

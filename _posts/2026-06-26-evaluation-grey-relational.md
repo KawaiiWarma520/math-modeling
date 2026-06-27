@@ -2,8 +2,7 @@
 layout: post
 title: 灰色关联分析：当数据不多时，如何判断“谁和谁更像”？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 评价模型
   - 灰色关联分析

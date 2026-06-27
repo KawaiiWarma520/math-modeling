@@ -2,8 +2,7 @@
 layout: post
 title: 神经网络：为什么“多层结构”可以逼近复杂现实？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 机器学习
   - 神经网络

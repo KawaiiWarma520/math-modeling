@@ -2,8 +2,7 @@
 layout: post
 title: 最大流：一张运输网络最多能运多少货？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 图论模型
   - 最大流

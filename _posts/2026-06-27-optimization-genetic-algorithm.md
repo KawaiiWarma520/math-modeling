@@ -2,8 +2,7 @@
 layout: post
 title: 遗传算法：如何用“进化思想”解决复杂优化问题？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 遗传算法

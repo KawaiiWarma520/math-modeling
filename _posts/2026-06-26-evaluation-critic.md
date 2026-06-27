@@ -2,8 +2,7 @@
 layout: post
 title: CRITIC：当指标之间会“互相影响”时，权重该怎么定？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 评价模型
   - CRITIC

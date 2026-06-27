@@ -2,8 +2,7 @@
 layout: post
 title: 评价问题怎么识别：什么时候不是“求最优”，而是“排优劣”？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 评价模型
   - TOPSIS

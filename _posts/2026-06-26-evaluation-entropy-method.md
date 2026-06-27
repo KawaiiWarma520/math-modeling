@@ -2,8 +2,7 @@
 layout: post
 title: 熵权法：当权重不能靠感觉时，数据会告诉你答案
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 评价模型
   - 熵权法

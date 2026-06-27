@@ -2,8 +2,7 @@
 layout: post
 title: 旅行商问题：怎样走遍所有地点，又不走冤枉路？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 图论模型
   - 旅行商问题

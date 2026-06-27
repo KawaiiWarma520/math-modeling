@@ -2,8 +2,7 @@
 layout: post
 title: 评价类真题拆解：如何把“多指标比较”变成可排序结果？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - TOPSIS
   - AHP

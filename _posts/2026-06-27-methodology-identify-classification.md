@@ -2,8 +2,7 @@
 layout: post
 title: 分类与聚类问题怎么识别：有没有标签是关键
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 机器学习
   - 分类模型

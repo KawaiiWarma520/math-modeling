@@ -2,8 +2,7 @@
 layout: post
 title: AHP：当答案没有标准时，如何做出最合理的选择？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 评价模型
   - AHP

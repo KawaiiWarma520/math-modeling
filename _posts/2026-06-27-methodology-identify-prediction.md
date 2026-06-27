@@ -2,8 +2,7 @@
 layout: post
 title: 预测问题怎么识别：什么时候该“看历史推未来”？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - 时间序列

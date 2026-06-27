@@ -2,8 +2,7 @@
 layout: post
 title: 多目标优化：当“利润最大”和“成本最低”同时存在时怎么办？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 多目标优化

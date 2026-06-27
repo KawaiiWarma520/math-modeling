@@ -2,8 +2,7 @@
 layout: post
 title: 假设检验：如何判断一个结论“到底是不是偶然发生的”？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 统计模型
   - 假设检验

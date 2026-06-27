@@ -2,8 +2,7 @@
 layout: post
 title: 多模型组合策略：为什么竞赛论文都不是只用一个模型？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 模型组合
   - 集成学习

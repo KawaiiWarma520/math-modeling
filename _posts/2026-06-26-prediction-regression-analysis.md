@@ -2,8 +2,7 @@
 layout: post
 title: 回归分析：如何找到“原因”和“结果”之间的数学关系？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - 回归分析

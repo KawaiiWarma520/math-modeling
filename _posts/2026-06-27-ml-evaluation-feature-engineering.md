@@ -2,8 +2,7 @@
 layout: post
 title: 特征工程：为什么同一个模型，别人能比你高20分？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 特征工程
   - 数据处理

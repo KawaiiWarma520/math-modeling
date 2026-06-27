@@ -2,8 +2,7 @@
 layout: post
 title: 随机森林：为什么“一群不完美的树”反而更可靠？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 机器学习
   - 随机森林

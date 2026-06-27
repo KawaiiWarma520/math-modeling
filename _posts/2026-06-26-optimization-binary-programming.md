@@ -2,8 +2,7 @@
 layout: post
 title: 0-1 整数规划：有些问题，不是做多少，而是做还是不做
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 0-1整数规划

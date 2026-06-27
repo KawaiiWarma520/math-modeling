@@ -2,8 +2,7 @@
 layout: post
 title: 模拟退火：如何通过“接受变差解”跳出局部最优？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 模拟退火

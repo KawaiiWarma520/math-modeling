@@ -2,8 +2,7 @@
 layout: post
 title: 方差分析（ANOVA）：当你要比较三组以上数据时怎么办？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 统计模型
   - 方差分析

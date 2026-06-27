@@ -2,8 +2,7 @@
 layout: post
 title: 集成学习：为什么“多个弱模型”加起来会变成最强模型？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 集成学习
   - Bagging

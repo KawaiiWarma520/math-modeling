@@ -2,8 +2,7 @@
 layout: post
 title: 预测类真题拆解：如何从历史数据预测未来趋势？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - 时间序列

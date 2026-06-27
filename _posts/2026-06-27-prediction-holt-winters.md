@@ -2,8 +2,7 @@
 layout: post
 title: Holt-Winters模型：如何预测带“季节变化”的时间序列？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - Holt-Winters

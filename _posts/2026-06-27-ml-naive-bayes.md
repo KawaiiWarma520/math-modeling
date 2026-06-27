@@ -2,8 +2,7 @@
 layout: post
 title: 朴素贝叶斯：如何用“概率思维”做分类判断？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 机器学习
   - 朴素贝叶斯

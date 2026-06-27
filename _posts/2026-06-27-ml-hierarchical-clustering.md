@@ -2,8 +2,7 @@
 layout: post
 title: 层次聚类：如何一步步把数据“分层归类”？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 无监督学习
   - 层次聚类

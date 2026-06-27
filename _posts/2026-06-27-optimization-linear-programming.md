@@ -2,8 +2,7 @@
 layout: post
 title: 线性规划：资源有限时，如何做到收益最大？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 线性规划

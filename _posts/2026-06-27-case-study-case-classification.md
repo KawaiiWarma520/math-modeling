@@ -2,8 +2,7 @@
 layout: post
 title: 分类与机器学习真题拆解：如何从数据中判断“属于哪一类”？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 分类模型
   - 机器学习

@@ -2,8 +2,7 @@
 layout: post
 title: 优化问题怎么识别：看到“最优”两个字就够了吗？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 问题识别

@@ -2,8 +2,7 @@
 layout: post
 title: 最短路径：怎样找到最快的一条路？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 图论模型
   - 最短路径

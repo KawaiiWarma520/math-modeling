@@ -2,8 +2,7 @@
 layout: post
 title: Monte Carlo仿真：当问题太复杂时，如何用“随机实验”逼近答案？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 仿真模型
   - 随机模拟

@@ -2,8 +2,7 @@
 layout: post
 title: 决策树：如何像人一样一步步“分情况做判断”？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 机器学习
   - 决策树

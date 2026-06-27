@@ -2,8 +2,7 @@
 layout: post
 title: SARIMA模型：如何同时处理“趋势 + 季节性”的时间序列预测？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - SARIMA

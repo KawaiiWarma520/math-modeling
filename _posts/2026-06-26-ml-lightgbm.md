@@ -2,8 +2,7 @@
 layout: post
 title: LightGBM：为什么它是竞赛表格数据中的“速度与精度之王”？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 机器学习
   - LightGBM

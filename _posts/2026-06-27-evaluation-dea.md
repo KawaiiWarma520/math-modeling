@@ -2,8 +2,7 @@
 layout: post
 title: DEA数据包络分析：如何衡量“谁更高效”而不是“谁更优秀”？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - DEA
   - CCR模型

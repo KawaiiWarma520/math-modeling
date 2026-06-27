@@ -2,8 +2,7 @@
 layout: post
 title: 指派问题：谁去完成哪项任务最合适？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 指派问题

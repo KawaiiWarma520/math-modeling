@@ -2,8 +2,7 @@
 layout: post
 title: Logistic回归：当结果只有“是”或“否”时，如何建模？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 分类模型
   - Logistic回归

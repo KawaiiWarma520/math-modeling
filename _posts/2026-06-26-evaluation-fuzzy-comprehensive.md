@@ -2,8 +2,7 @@
 layout: post
 title: 模糊综合评价：当“好与不好”无法用数字精确表达时怎么办？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 评价模型
   - 模糊综合评价

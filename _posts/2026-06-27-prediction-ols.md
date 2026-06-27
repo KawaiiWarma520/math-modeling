@@ -2,8 +2,7 @@
 layout: post
 title: OLS最小二乘法：如何用一条“最合适的直线”描述现实数据？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - OLS

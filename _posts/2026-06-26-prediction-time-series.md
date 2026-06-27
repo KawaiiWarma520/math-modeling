@@ -2,8 +2,7 @@
 layout: post
 title: 时间序列预测：当数据变多时，如何捕捉未来的趋势？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - 时间序列

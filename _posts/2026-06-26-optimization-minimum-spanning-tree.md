@@ -2,8 +2,7 @@
 layout: post
 title: 最小生成树：怎样用最少的钱连接所有地方？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 图论模型
   - 最小生成树

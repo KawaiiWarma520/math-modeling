@@ -2,8 +2,7 @@
 layout: post
 title: 灰色预测 GM(1,1)：数据很少时，如何预测未来？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 预测模型
   - 灰色预测

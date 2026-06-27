@@ -2,8 +2,7 @@
 layout: post
 title: 模型评估体系：如何判断一个模型“到底好不好”？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 模型评估
   - ROC

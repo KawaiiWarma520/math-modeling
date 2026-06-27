@@ -2,8 +2,7 @@
 layout: post
 title: 排队论：如何用数学描述“等待”和“服务”的系统？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 排队论
   - 其他模型

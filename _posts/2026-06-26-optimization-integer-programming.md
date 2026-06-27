@@ -2,8 +2,7 @@
 layout: post
 title: 整数规划：为什么最优解不能是 3.7 辆车？
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 整数规划

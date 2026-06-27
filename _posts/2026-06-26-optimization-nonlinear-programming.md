@@ -2,8 +2,7 @@
 layout: post
 title: 非线性规划：当现实世界不再是直线时
 date: 2026-06-26 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 优化模型
   - 非线性规划

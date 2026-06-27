@@ -2,8 +2,7 @@
 layout: post
 title: 数学建模选模型决策系统：看到题目后如何快速选对模型？
 date: 2026-06-27 +0800
-categories:
-  - 模型百科
+categories: 模型百科
 tags:
   - 模型选择
   - 建模方法论

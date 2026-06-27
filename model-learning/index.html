@@ -321,11 +321,120 @@ function assignGroup(post) {
   return '其他模型';
 }
 
+// ===== 自定义每组文章的排序（按 URL slug 匹配） =====
+var groupArticleOrder = {
+  '优化模型': [
+    'optimization-linear-programming',
+    'optimization-integer-programming',
+    'optimization-binary-programming',
+    'optimization-goal-programming',
+    'optimization-nonlinear-programming',
+    'optimization-dynamic-programming',
+    'optimization-shortest-path',
+    'optimization-max-flow',
+    'optimization-minimum-spanning-tree',
+    'optimization-assignment-problem',
+    'optimization-traveling-salesman',
+    'optimization-multi-objective',
+    'optimization-genetic-algorithm',
+    'optimization-simulated-annealing'
+  ],
+  '评价与决策模型': [
+    'evaluation-ahp',
+    'evaluation-fuzzy-comprehensive',
+    'evaluation-entropy-method',
+    'evaluation-critic',
+    'evaluation-topsis',
+    'evaluation-grey-relational',
+    'evaluation-dea'
+  ],
+  '预测与回归模型': [
+    'prediction-grey-prediction',
+    'prediction-regression-analysis',
+    'prediction-logistic-regression',
+    'prediction-ols',
+    'prediction-time-series',
+    'prediction-arima',
+    'prediction-sarima',
+    'prediction-holt-winters'
+  ],
+  '机器学习模型': [
+    'ml-naive-bayes',
+    'ml-knn',
+    'ml-decision-tree',
+    'ml-random-forest',
+    'ml-svm',
+    'ml-xgboost',
+    'ml-lightgbm',
+    'ml-neural-network',
+    'ml-kmeans',
+    'ml-pca',
+    'ml-hierarchical-clustering',
+    'ml-dbscan',
+    'ml-evaluation-feature-engineering',
+    'ml-evaluation-model-evaluation',
+    'ml-evaluation-ensemble-learning'
+  ],
+  '统计模型': [
+    'statistics-hypothesis-testing',
+    'statistics-anova',
+    'statistics-chi-square'
+  ],
+  '其他模型': [
+    'other-markov-chain',
+    'other-queuing-theory',
+    'other-monte-carlo'
+  ],
+  '建模实战案例': [
+    'case-study-case-optimization',
+    'case-study-case-evaluation',
+    'case-study-case-prediction',
+    'case-study-case-classification'
+  ],
+  '问题类型与建模方法论': [
+    'methodology-identify-optimization',
+    'methodology-identify-evaluation',
+    'methodology-identify-prediction',
+    'methodology-identify-classification',
+    'methodology-model-selection-system',
+    'methodology-multi-model-strategy',
+    'methodology-quick-reference'
+  ]
+};
+
+function sortGroup(posts, groupName) {
+  var order = groupArticleOrder[groupName];
+  if (!order || !order.length) return posts;
+  var map = {};
+  posts.forEach(function(p) {
+    // extract slug from url: /模型百科/slug/
+    var parts = p.url.replace(/\/$/,'').split('/');
+    var slug = parts[parts.length - 1];
+    map[slug] = p;
+  });
+  var sorted = [];
+  order.forEach(function(slug) {
+    if (map[slug]) sorted.push(map[slug]);
+  });
+  // append any unmatched posts at end
+  posts.forEach(function(p) {
+    var parts = p.url.replace(/\/$/,'').split('/');
+    var slug = parts[parts.length - 1];
+    if (order.indexOf(slug) === -1) sorted.push(p);
+  });
+  return sorted;
+}
+
 var grouped = {};
 allPostsData.forEach(function(p) {
   var g = assignGroup(p);
   if (!grouped[g]) grouped[g] = [];
   grouped[g].push(p);
+});
+
+// 每组内按自定义顺序排序
+Object.keys(grouped).forEach(function(g) {
+  grouped[g] = sortGroup(grouped[g], g);
 });
 
 var groupOrder = groupsConfig.map(function(g) { return g.name; });

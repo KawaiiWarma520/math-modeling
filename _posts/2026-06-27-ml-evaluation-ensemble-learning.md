@@ -9,7 +9,7 @@ tags:
   - Boosting
   - Stacking
   - 机器学习
-description: ""三个臭皮匠顶个诸葛亮"——集成学习就是这个道理。通过金融风险预测案例，理解 Bagging、Boosting、Stacking 三种集成思路如何把多个弱模型组合成一个强模型。"
+description: "“三个臭皮匠顶个诸葛亮”——集成学习就是这个道理。通过金融风险预测案例，理解 Bagging、Boosting、Stacking 三种集成思路如何把多个弱模型组合成一个强模型。"
 ---
 
 # 📖 故事引入

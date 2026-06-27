@@ -8,7 +8,7 @@ tags:
   - LightGBM
   - 梯度提升
   - 集成学习
-description: "比 XGBoost 更快、内存更省、精度却不输——这就是 LightGBM。通过用户流失预测案例，理解 LightGBM 如何用"单边梯度采样"等技术实现高效训练，是大规模数据建模的首选。"
+description: "比 XGBoost 更快、内存更省、精度却不输——这就是 LightGBM。通过用户流失预测案例，理解 LightGBM 如何用“单边梯度采样”等技术实现高效训练，是大规模数据建模的首选。"
 ---
 
 # 📖 故事引入

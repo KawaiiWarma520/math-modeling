@@ -8,7 +8,7 @@ tags:
   - XGBoost
   - 集成学习
   - 梯度提升
-description: "为什么 XGBoost 在竞赛中这么强？答案是"不断纠错"。通过用户流失预测案例，理解 XGBoost 如何一棵树接一棵树地修正前一棵的预测误差（Boosting），是 Kaggle 和数模竞赛的常胜将军。"
+description: "为什么 XGBoost 在竞赛中这么强？答案是“不断纠错”。通过用户流失预测案例，理解 XGBoost 如何一棵树接一棵树地修正前一棵的预测误差（Boosting），是 Kaggle 和数模竞赛的常胜将军。"
 ---
 
 # 📖 故事引入
